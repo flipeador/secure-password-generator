@@ -7,8 +7,8 @@ Browser extension to generate random passwords and QR codes.
   <a alt="Firefox Add-ons" href="https://addons.mozilla.org/addon/secure-password-generator-2">
     <img src="https://img.shields.io/badge/Firefox Add--ons-orange.svg?style=for-the-badge"/>
   </a>⠀
-    <a alt="Chrome Web Store" href="https://chromewebstore.google.com">
-    <img src="https://img.shields.io/badge/Chrome Web Store-Pending-red.svg?style=for-the-badge"/>
+    <a alt="Chrome Web Store" href="https://chrome.google.com/webstore/detail/kmekigbemdeoedipbfgjhmaodbgfhidc">
+    <img src="https://img.shields.io/badge/Chrome Web Store-red.svg?style=for-the-badge"/>
   </a>⠀
     <a alt="Donate via PayPal" href="https://www.paypal.com/donate/?hosted_button_id=DNFCXHF8NF32Y">
     <img src="https://img.shields.io/badge/Donate-PayPal-blue.svg?style=for-the-badge"/>
