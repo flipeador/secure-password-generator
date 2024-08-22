@@ -3,7 +3,7 @@
 Browser extension to generate random passwords and QR codes.
 
 <p align="center">
-  <img alt="Preview" src="assets/preview.png"/> <br/> <br/>
+  <img alt="Preview" src="assets/preview.webp"/> <br/> <br/>
   <a alt="Firefox Add-ons" href="https://addons.mozilla.org/addon/secure-password-generator-2">
     <img src="https://img.shields.io/badge/Firefox Add--ons-orange.svg?style=for-the-badge"/>
   </a>⠀
