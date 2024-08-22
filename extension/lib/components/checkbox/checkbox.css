@@ -1,0 +1,99 @@
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0px;
+  outline: none;
+}
+
+:host {
+  display: flex;
+  gap: .5em;
+  align-items: center;
+  cursor: default;
+}
+
+:host([nowrap]) {
+  text-wrap: nowrap;
+}
+
+#checkbox {
+  --clr-bgn: var(--clr-bgn-input, "transparent"); /* background color */
+  --clr-bgh: var(--clr-bgh-input, "transparent"); /* background color hover */
+  --clr-olf: var(--clr-olf-input, "transparent"); /* outline color focus */
+  --clr-bsn: var(--clr-bsn-input, "transparent"); /* box-shadow color */
+
+  position: relative;
+  flex-shrink: 0;
+  width: 1.5em;
+  height: 1.5em;
+  border-radius: 5px;
+  background: var(--clr-bgn);
+  box-shadow: 0 0 2px var(--clr-bsn);
+  transition: background-color .2s linear;
+  user-select: none;
+}
+
+#checkbox:focus-visible {
+  outline: 1px dashed var(--clr-olf);
+}
+
+#checkbox[aria-disabled="false"]:hover {
+  background: var(--clr-bgh);
+}
+
+#checkbox::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  box-shadow: 0 0 0 .5em currentColor;
+  border-radius: inherit;
+  opacity: 0;
+  transition-duration: .5s;
+  transition-property: opacity, box-shadow;
+  transition-timing-function: cubic-bezier(.12, .4, .29, 1.46);
+}
+
+#checkbox:not([aria-checked="mixed"])::after {
+  content: "";
+  position: absolute;
+  inset: 42% auto auto 50%;
+  width: 30%;
+  height: 50%;
+  border-right: 2px solid currentColor;
+  border-bottom: 2px solid currentColor;
+  scale: 0;
+  rotate: 45deg;
+  translate: -50% -50%;
+  transition-duration: .1s;
+  transition-property: opacity, scale;
+  transition-timing-function: cubic-bezier(.71, -.46, .88, .6);
+  opacity: 0;
+}
+
+#checkbox[aria-checked="mixed"]::after {
+  content: "";
+  position: absolute;
+  inset: calc(50% - 1px) auto auto 25%;
+  width: 50%;
+  height: 2px;
+  background: currentColor;
+  scale: 0;
+  opacity: 0;
+}
+
+#checkbox:active[aria-checked="false"]::before {
+  box-shadow: none;
+  transition: none;
+  opacity: 1;
+}
+
+#checkbox[aria-checked="mixed"]::after,
+#checkbox[aria-checked="true"]::after {
+  opacity: 1;
+  scale: 1.2;
+  transition: scale .2s cubic-bezier(.12, .4, .29, 1.46) .1s;
+}
+
+[aria-disabled="true"] {
+  opacity: .5;
+  pointer-events: none;
+}

@@ -1,24 +1,28 @@
+<!doctype html>
 <html>
   <link rel="stylesheet" href="popup.css">
   <body>
-     <!-- MAIN -->
+    <div class="background">
+      <div></div>
+    </div>
+    <!-- Nav -->
+    <nav class="tab" tab="1">
+      <button open>Password Generator</button>
+      <button name="generate-qr-code">QR Code Generator</button>
+    </nav>
+    <!-- Main -->
     <main>
-      <!-- Tab -->
-      <div id="tab">
-        <button active>Password Generator</button>
-        <button>QR Code Generator</button>
-      </div>
       <!-- Password Generator -->
-      <div id="tab-1">
+      <div class="tab-content" tab="1-1" open>
         <!-- Length -->
         <span>Password length:</span>
-        <input id="length" type="number" value="20" session local>
+        <input id="length" type="number" value="20"
+          min="1" max="99" session local>
         <span aria-hidden="true"></span>
         <!-- Letters -->
-        <label>
-          <input id="letters" type="checkbox" checked session local>
-          <span>Letters (A-Z):</span>
-        </label>
+        <x-checkbox id="letters" nowrap checked session local>
+          Letters (A-Z):
+        </x-checkbox>
         <select id="letters-case" value="3" session local>
           <option value="upper">Uppercase</option>
           <option value="lower">Lowercase</option>
@@ -27,37 +31,39 @@
         <input id="letters-min" type="number" value="10" min="1"
           title="Minimum number of letters" session local>
         <!-- Digits -->
-        <label>
-          <input id="digits" type="checkbox" checked session local>
-          <span>Digits (0-9):</span>
-        </label>
+        <x-checkbox id="digits" nowrap checked session local>
+          Digits (0-9):
+        </x-checkbox>
         <span aria-hidden="true"></span>
         <input id="digits-min" type="number" value="10" min="1"
           title="Minimum number of digits" session local>
         <!-- Other characters -->
-        <label>
-          <input id="other" type="checkbox" session local>
-          <span>Other characters:</span>
-        </label>
+        <x-checkbox id="other" nowrap session local>
+          Other characters:
+        </x-checkbox>
         <input id="other-chars" type="text" unique focus
           value="&quot;'!#$%&()*+,-./:;<=>?@[\]^_`{|}~" session local>
         <input id="other-min" type="number" value="5" min="1"
           title="Minimum number of characters" session local>
         <!-- Excluded characters -->
-        <label>
-          <input id="exc" type="checkbox" session local>
-          <span>Excluded characters:</span>
-        </label>
+        <x-checkbox id="exc" nowrap session local>
+          Excluded characters:
+        </x-checkbox>
         <input id="exc-chars" type="text" unique focus session local>
         <span aria-hidden="true"></span>
+        <!-- Exhaustive randomized transfer -->
+        <x-checkbox id="exhaustive-randomized-transfer" checked session local>
+          Ensures all characters are used before repeating any.
+        </x-checkbox>
         <!-- Password -->
         <div class="password">
-          <input id="password" type="password" autocomplete="off" readonly session>
+          <input id="password" type="password" autocomplete="off"
+            title="The generated password" readonly session>
           <button id="password-eye">
             <svg style="display: none; width: 1.5em; height: 1em;">
               <use xlink:href="#eye"></use>
             </svg>
-            <svg style="width: 1.5em; height: 1em;">
+            <svg style="display: block; width: 1.5em; height: 1em;">
               <use xlink:href="#eye-off"></use>
             </svg>
           </button>
@@ -69,21 +75,21 @@
         <button id="use">Use</button>
       </div>
       <!-- QR Code Generator -->
-      <div id="tab-2" style="display: none;">
+      <div class="tab-content" tab="1-2">
         <span>Issuer:</span>
         <input id="issuer" type="text" placeholder="Google"
-          title="Account provider or service" session local>
+          title="Account provider or service" session>
         <span>Label:</span>
         <input id="label" type="text" placeholder="example@gmail.com"
-          title="Account name or email" session local>
+          title="Account name or email" session>
         <span>Secret:</span>
         <input id="secret" type="text" placeholder="N23Y253JQO7VDN7VBTP64N33"
           title="Arbitrary key value encoded in Base32" session>
         <div class="qr-code">
       </div>
     </main>
-     <!-- SVG -->
-    <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+    <!-- SVG -->
+    <svg style="display: none">
       <defs>
         <!-- Eye -->
         <!-- https://lucide.dev/icons/eye -->
@@ -101,8 +107,9 @@
         </symbol>
       </defs>
     </svg>
-    <!-- SCRIPT -->
+    <!-- SCRIPTS -->
     <script src="../lib/qrcode.js" defer></script>
+    <script src="../lib/components/checkbox/checkbox.js" type="module"></script>
     <script src="popup.js" type="module"></script>
   </body>
 </html>
