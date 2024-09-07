@@ -1,7 +1,8 @@
 <!doctype html>
 <html>
   <link rel="stylesheet" href="popup.css">
-  <body>
+  <body style="display: none;">
+    <!-- Background -->
     <div class="background">
       <div></div>
     </div>
@@ -15,12 +16,20 @@
       <!-- Password Generator -->
       <div class="tab-content" tab="1-1" open>
         <!-- Length -->
-        <span>Password length:</span>
-        <input id="length" type="number" value="20"
-          min="1" max="99" session local>
+        <span aria-hidden="true">Password length:</span>
+        <x-input
+          id="length"
+          type="numeric"
+          min="1" max="99" value="20"
+          session local>
+        </x-input>
         <span aria-hidden="true"></span>
         <!-- Letters -->
-        <x-checkbox id="letters" nowrap checked session local>
+        <x-checkbox
+          id="letters"
+          for="letters-case letters-min"
+          nowrap checked
+          local session>
           Letters (A-Z):
         </x-checkbox>
         <select id="letters-case" value="3" session local>
@@ -28,47 +37,79 @@
           <option value="lower">Lowercase</option>
           <option value="mixed" selected>MixedCase</option>
         </select>
-        <input id="letters-min" type="number" value="10" min="1"
-          title="Minimum number of letters" session local>
+        <x-input
+          id="letters-min"
+          type="numeric"
+          min="1" max="99" value="10"
+          title="Minimum number of letters"
+          session local>
+        </x-input>
         <!-- Digits -->
-        <x-checkbox id="digits" nowrap checked session local>
+        <x-checkbox
+          id="digits"
+          for="digits-min"
+          nowrap checked
+          session local>
           Digits (0-9):
         </x-checkbox>
         <span aria-hidden="true"></span>
-        <input id="digits-min" type="number" value="10" min="1"
-          title="Minimum number of digits" session local>
+        <x-input
+          id="digits-min"
+          type="numeric"
+          min="1" max="99" value="10"
+          title="Minimum number of digits"
+          session local>
+        </x-input>
         <!-- Other characters -->
-        <x-checkbox id="other" nowrap session local>
+        <x-checkbox
+          id="other"
+          for="other-min other-chars"
+          nowrap
+          session local>
           Other characters:
         </x-checkbox>
-        <input id="other-chars" type="text" unique focus
-          value="&quot;'!#$%&()*+,-./:;<=>?@[\]^_`{|}~" session local>
-        <input id="other-min" type="number" value="5" min="1"
-          title="Minimum number of characters" session local>
+        <x-input
+          id="other-chars"
+          value="&quot;'!#$%&()*+,-./:;<=>?@[\]^_`{|}~"
+          unique focus
+          session local>
+        </x-input>
+        <x-input
+          id="other-min"
+          type="numeric"
+          min="1" max="99" value="5"
+          title="Minimum number of characters"
+          session local>
+        </x-input>
         <!-- Excluded characters -->
-        <x-checkbox id="exc" nowrap session local>
+        <x-checkbox
+          id="exc"
+          for="exc-chars"
+          nowrap
+          session local>
           Excluded characters:
         </x-checkbox>
-        <input id="exc-chars" type="text" unique focus session local>
+        <x-input
+          id="exc-chars"
+          unique focus
+          session local>
+        </x-input>
         <span aria-hidden="true"></span>
         <!-- Exhaustive randomized transfer -->
         <x-checkbox id="exhaustive-randomized-transfer" checked session local>
           Ensures all characters are used before repeating any.
         </x-checkbox>
         <!-- Password -->
-        <div class="password">
-          <input id="password" type="password" autocomplete="off"
-            title="The generated password" readonly session>
-          <button id="password-eye">
-            <svg style="display: none; width: 1.5em; height: 1em;">
-              <use xlink:href="#eye"></use>
-            </svg>
-            <svg style="display: block; width: 1.5em; height: 1em;">
-              <use xlink:href="#eye-off"></use>
-            </svg>
-          </button>
-        </div>
-        <button id="password-copy">Copy</button>
+        <x-input
+          id="password"
+          type="password"
+          flags="copy"
+          title="The generated password"
+          readonly session>
+          <svg slot="icon">
+            <use xlink:href="#key-round"></use>
+          </svg>
+        </x-input>
         <!-- Buttons -->
         <button id="save">Save options</button>
         <button id="generate">Generate password</button>
@@ -76,40 +117,68 @@
       </div>
       <!-- QR Code Generator -->
       <div class="tab-content" tab="1-2">
-        <span>Issuer:</span>
-        <input id="issuer" type="text" placeholder="Google"
-          title="Account provider or service" session>
-        <span>Label:</span>
-        <input id="label" type="text" placeholder="example@gmail.com"
-          title="Account name or email" session>
-        <span>Secret:</span>
-        <input id="secret" type="text" placeholder="N23Y253JQO7VDN7VBTP64N33"
-          title="Arbitrary key value encoded in Base32" session>
-        <div class="qr-code">
+        <x-input
+          id="issuer"
+          placeholder="Google"
+          title="Account provider or service"
+          session>
+          <svg slot="icon">
+            <use xlink:href="#building"></use>
+          </svg>
+        </x-input>
+        <x-input
+          id="label"
+          placeholder="example@gmail.com"
+          title="Account name or email"
+          session>
+          <svg slot="icon">
+            <use xlink:href="#mail"></use>
+          </svg>
+        </x-input>
+        <x-input
+          id="secret"
+          placeholder="N23Y253JQO7VDN7VBTP64N33"
+          title="Arbitrary key value encoded in Base32"
+          session>
+          <svg slot="icon">
+            <use xlink:href="#key-round"></use>
+          </svg>
+        </x-input>
+        <div id="qr-code">
       </div>
     </main>
     <!-- SVG -->
     <svg style="display: none">
       <defs>
-        <!-- Eye -->
-        <!-- https://lucide.dev/icons/eye -->
-        <symbol id="eye" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0"/>
-          <circle cx="12" cy="12" r="3"/>
+        <!-- Key Round -->
+        <!-- https://lucide.dev/icons/key-round -->
+        <symbol id="key-round" viewBox="0 0 24 24" fill="none" stroke="gold" stroke-width="2">
+          <path d="M2.586 17.414A2 2 0 0 0 2 18.828V21a1 1 0 0 0 1 1h3a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h1a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h.172a2 2 0 0 0 1.414-.586l.814-.814a6.5 6.5 0 1 0-4-4z"/>
+          <circle cx="16.5" cy="7.5" r=".5" fill="currentColor"/>
         </symbol>
-        <!-- Eye Off -->
-        <!-- https://lucide.dev/icons/eye-off -->
-        <symbol id="eye-off" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M10.733 5.076a10.744 10.744 0 0 1 11.205 6.575 1 1 0 0 1 0 .696 10.747 10.747 0 0 1-1.444 2.49"/>
-          <path d="M14.084 14.158a3 3 0 0 1-4.242-4.242"/>
-          <path d="M17.479 17.499a10.75 10.75 0 0 1-15.417-5.151 1 1 0 0 1 0-.696 10.75 10.75 0 0 1 4.446-5.143"/>
-          <path d="m2 2 20 20"/>
+        <!-- Mail -->
+        <!-- https://lucide.dev/icons/mail -->
+        <symbol id="mail" viewBox="0 0 24 24" fill="none" stroke="cornflowerblue" stroke-width="2">
+          <rect width="20" height="16" x="2" y="4" rx="2"/>
+          <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
+        </symbol>
+        <!-- Building 2 -->
+        <!-- https://lucide.dev/icons/building-2 -->
+        <symbol id="building" viewBox="0 0 24 24" fill="none" stroke="coral" stroke-width="2">
+          <path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/>
+          <path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/>
+          <path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"/>
+          <path d="M10 6h4"/>
+          <path d="M10 10h4"/>
+          <path d="M10 14h4"/>
+          <path d="M10 18h4"/>
         </symbol>
       </defs>
     </svg>
     <!-- SCRIPTS -->
     <script src="../lib/qrcode.js" defer></script>
-    <script src="../lib/components/checkbox/checkbox.js" type="module"></script>
-    <script src="popup.js" type="module"></script>
+    <script type="module" src="../lib/components/x-checkbox/checkbox.js"></script>
+    <script type="module" src="../lib/components/x-input/input.js"></script>
+    <script type="module" src="popup.js"></script>
   </body>
 </html>

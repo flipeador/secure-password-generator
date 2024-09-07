@@ -1,6 +1,6 @@
 # Secure Password Generator
 
-Browser extension to generate random passwords and QR codes.
+Browser extension to generate secure random passwords and QR codes.
 
 <p align="center">
   <img alt="Preview" src="assets/preview.webp"/> <br/> <br/>
@@ -22,20 +22,28 @@ Generate cryptographically secure random passwords with customizable options.
 Each time an option is modified, it is saved in the **session** storage. \
 Items in the session storage area are stored in-memory and will not be persisted to disk.
 
-Click the `Save options` button to save the options in the **local** store. \
+Click the `Save options` button to save the options in the **local** storage. \
 Items in the local storage area stored locally and cleared when the extension is removed.
 
-The `password` and QR code `secret` fields are never stored in the local storage.
+The `password` input field is never stored in the local storage.
 
 The UI and functionality is based on [`@mar-kolya\secure-password-generator`][spg].
 
 ### QR Code Generator
 
-Generate a QR code given a `issuer`, `label` and `secret` value.
+Generate a QR code given a `issuer`, `label` and `secret` value:
 
 > otpauth://totp/ISSUER:LABEL?secret=SECRET&issuer=ISSUER
 
-If the `issuer` or `label` fields are empty, generates a QR code using the `secret`.
+<p align="center">
+  <img alt="Preview" src="assets/qrcode.webp"/>
+</p>
+
+1. If the `issuer` or `label` fields are empty, generates a QR code just for the text in the `secret` input field.
+2. If `label` is an email and `secret` is empty, gets the [Gravatar profile image][gravatar] for the email address using sha256.
+3. If all fields are provided, generates a QR code using the [`otpauth://totp/` URI scheme][kuf], for your [authentication app][auth].
+
+The QR code input fields are never stored in the local storage.
 
 ## License
 
@@ -44,3 +52,6 @@ See the [license file](LICENSE) for details.
 
 <!-- Reference Links -->
 [spg]: https://github.com/mar-kolya/secure-password-generator
+[kuf]: https://github.com/google/google-authenticator/wiki/Key-Uri-Format
+[auth]: https://en.wikipedia.org/wiki/Authenticator
+[gravatar]: https://docs.gravatar.com/api/avatars/images

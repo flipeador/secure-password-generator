@@ -1,0 +1,118 @@
+#container {
+  display: flex;
+  gap: .5em;
+  align-items: center;
+  cursor: default;
+}
+
+:host([nowrap]) {
+  text-wrap: nowrap;
+}
+
+slot[name="checked"],
+slot[name="unchecked"],
+slot[name="intermediate"] {
+  display: none;
+}
+
+::slotted(svg) {
+  display: block;
+  width: 1.5em;
+  height: 1.5em;
+}
+
+#input {
+  position: relative;
+  flex-shrink: 0;
+  width: 1.5em;
+  height: 1.5em;
+  border-radius: 5px;
+  background: var(--clr-bgn);
+  box-shadow: 0 0 2px var(--clr-bsn);
+  transition:
+    color .2s linear,
+    background-color .2s linear;
+  user-select: none;
+}
+
+#input:focus-visible {
+  outline: 1px dashed var(--clr-olf);
+}
+
+#input:hover {
+  color: var(--clr-hl);
+  background: var(--clr-bgh);
+}
+
+#input.custom {
+  &[aria-checked="true"] > slot[name="checked"] {
+    display: inline-block;
+  }
+
+  &[aria-checked="false"] > slot[name="unchecked"] {
+    display: inline-block;
+  }
+
+  &[aria-checked="mixed"] > slot[name="intermediate"] {
+    display: inline-block;
+  }
+}
+
+#input:not(.custom) {
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    box-shadow: 0 0 0 .5em currentColor;
+    border-radius: inherit;
+    opacity: 0;
+    transition-duration: .5s;
+    transition-property: opacity, box-shadow;
+    transition-timing-function: cubic-bezier(.12, .4, .29, 1.46);
+  }
+
+  /* On click from unchecked to checked */
+  &:active[aria-checked="false"]::before {
+    box-shadow: none;
+    transition: none;
+    opacity: 1;
+  }
+
+  /* Checked state */
+  &:not([aria-checked="mixed"])::after {
+    content: "";
+    position: absolute;
+    inset: 42% auto auto 50%;
+    width: 30%;
+    height: 50%;
+    border-right: 2px solid currentColor;
+    border-bottom: 2px solid currentColor;
+    scale: 0;
+    rotate: 45deg;
+    translate: -50% -50%;
+    transition-duration: .1s;
+    transition-property: opacity, scale;
+    transition-timing-function: cubic-bezier(.71, -.46, .88, .6);
+    opacity: 0;
+  }
+
+  /* Intermediate state */
+  &[aria-checked="mixed"]::after {
+    content: "";
+    position: absolute;
+    inset: calc(50% - 1px) auto auto 25%;
+    width: 50%;
+    height: 2px;
+    background: currentColor;
+    scale: 0;
+    opacity: 0;
+  }
+
+  /* Both checked and intermediate states */
+  &[aria-checked="mixed"]::after,
+  &[aria-checked="true"]::after {
+    opacity: 1;
+    scale: 1.2;
+    transition: scale .2s cubic-bezier(.12, .4, .29, 1.46) .1s;
+  }
+}

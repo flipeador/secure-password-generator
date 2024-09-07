@@ -1,0 +1,19 @@
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0px;
+  border: none;
+  outline: none;
+  font: inherit;
+  color: inherit;
+}
+
+#container {
+  --clr-bgn: var(--clr-bgn-input, "transparent"); /* background color */
+  --clr-bgh: var(--clr-bgh-input, "transparent"); /* background color hover */
+  --clr-olf: var(--clr-olf-input, "transparent"); /* outline color focus */
+  --clr-bsn: var(--clr-bsn-input, "transparent"); /* box-shadow color */
+}
+
+[disabled] {
+  opacity: .5 !important;
+}

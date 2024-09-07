@@ -1,0 +1,100 @@
+<!-- Container -->
+<div
+  id="container"
+  part="container"
+  translate="no">
+  <!-- Icon -->
+  <!-- Light DOM SVG: slot="icon" -->
+  <slot
+    id="icon"
+    part="icon"
+    name="icon"
+    aria-hidden="true">
+  </slot>
+  <!-- Input -->
+  <input
+    id="input"
+    part="input"
+    aria-owns="eye arrows copy">
+  <!-- Eye Checkbox (On/Off) -->
+  <!-- Input: type="password" -->
+  <div
+    id="eye"
+    part="eye"
+    role="checkbox"
+    aria-checked="true"
+    aria-label="Toggle password">
+    <svg aria-hidden="true">
+      <title>Hide password</title>
+      <use xlink:href="#eye-on"></use>
+    </svg>
+    <svg aria-hidden="true">
+      <title>Reveal password</title>
+      <use xlink:href="#eye-off"></use>
+    </svg>
+  </div>
+  <!-- Arrow Buttons (Up/Down) -->
+  <!-- Input: type="text" inputmode="numeric" -->
+  <div id="arrows" part="arrows">
+    <svg
+      id="up"
+      part="up"
+      role="button"
+      aria-label="Increase value by one step">
+      <use xlink:href="#chevron-up"></use>
+    </svg>
+    <svg
+      id="down"
+      part="down"
+      role="button"
+      aria-label="Decrease value by one step">
+      <use xlink:href="#chevron-down"></use>
+    </svg>
+  </div>
+  <!-- Copy Button -->
+  <div
+    id="copy"
+    part="copy"
+    role="button"
+    aria-label="Copy to clipboard">
+    <svg aria-hidden="true">
+      <title>Copy to clipboard</title>
+      <use xlink:href="#_copy"></use>
+    </svg>
+  </div>
+</img>
+<!-- SVG -->
+<svg style="display: none">
+  <defs>
+    <!-- Eye -->
+    <!-- https://lucide.dev/icons/eye -->
+    <symbol id="eye-on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0"/>
+      <circle cx="12" cy="12" r="3"/>
+    </symbol>
+    <!-- Eye Off -->
+    <!-- https://lucide.dev/icons/eye-off -->
+    <symbol id="eye-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M10.733 5.076a10.744 10.744 0 0 1 11.205 6.575 1 1 0 0 1 0 .696 10.747 10.747 0 0 1-1.444 2.49"/>
+      <path d="M14.084 14.158a3 3 0 0 1-4.242-4.242"/>
+      <path d="M17.479 17.499a10.75 10.75 0 0 1-15.417-5.151 1 1 0 0 1 0-.696 10.75 10.75 0 0 1 4.446-5.143"/>
+      <path d="m2 2 20 20"/>
+    </symbol>
+    <!-- Chevron Up -->
+    <!-- https://lucide.dev/icons/chevron-up -->
+    <symbol id="chevron-up" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4">
+      <path d="m18 15-6-6-6 6"/>
+    </symbol>
+    <!-- Chevron Down -->
+    <!-- https://lucide.dev/icons/chevron-down -->
+    <symbol id="chevron-down" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4">
+      <path d="m6 9 6 6 6-6"/>
+    </symbol>
+    <!-- Copy -->
+    <!-- https://lucide.dev/icons/copy -->
+    <symbol id="_copy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <rect width="14" height="14" x="8" y="8" rx="2" ry="2"/>
+      <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/>
+    </symbol>
+  </defs>
+</svg>

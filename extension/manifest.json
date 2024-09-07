@@ -16,5 +16,6 @@
   ],
   "action": {
     "default_popup": "popup/popup.html"
-  }
+  },
+  "minimum_chrome_version": "125"
 }

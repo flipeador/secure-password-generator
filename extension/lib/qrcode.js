@@ -8,6 +8,7 @@
  * Licensed under the MIT license.
  * https://opensource.org/license/mit
  *
+ *
  * The word "QR Code" is registered trademark of DENSO WAVE INCORPORATED.
  * https://www.qrcode.com/en/patent.html
  *
