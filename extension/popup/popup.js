@@ -1,344 +1,217 @@
-/* global QRCode */
+/*
+    global
+        $tabview
+        $length
+        $letters
+        $digits
+        $excludechars
+        $otherchars
+        $othermin
+        $letterscase
+        $lettersmin
+        $digitsmin
+        $other
+        $exclude
+        $exhaustive
+        $password
+        $issuer
+        $label
+        $secret
+        $qrcode
+        $gravatar
+        $clearlocal
+        $clearsession
+        $import
+        $export
+        $save
+        $generate
+        $use
+*/
 
-const LETTERS = 'abcdefghijklmnopqrstuvwxyz';
+import * as util from '../lib/util.js';
+import { Component } from '../lib/components/component.js';
+
 const DIGITS = '0123456789';
+const LETTERS = 'abcdefghijklmnopqrstuvwxyz';
 
-const tabs = document.querySelectorAll('#tab > button');
+// Wait for all web components to fully load.
+await Component.ready();
 
-// Length
-const inputLength = document.querySelector('#length');
-// Letters
-const checkboxLetters = document.querySelector('#letters');
-const selectLettersCase = document.querySelector('#letters-case');
-const inputLettersMin = document.querySelector('#letters-min');
-// Digits
-const checkboxDigits = document.querySelector('#digits');
-const inputDigitsMin = document.querySelector('#digits-min');
-// Other characters
-const checkboxOther = document.querySelector('#other');
-const inputOtherChars = document.querySelector('#other-chars');
-const inputOtherMin = document.querySelector('#other-min');
-// Excluded characters
-const checkboxExc = document.querySelector('#exc');
-const inputExcChars = document.querySelector('#exc-chars');
-// Password
-const inputPassword = document.querySelector('#password');
-const buttonPasswordEye = document.querySelector('#password-eye');
-const svgPasswordEye = document.querySelector('#password-eye svg:first-child');
-const svgPasswordEyeOff = document.querySelector('#password-eye svg:last-child');
-const buttonPasswordCopy = document.querySelector('#password-copy');
-// Buttons
-const buttonSave = document.querySelector('#save');
-const buttonGenerate = document.querySelector('#generate');
-const buttonUse = document.querySelector('#use');
+// Make all elements with an ID globally available.
+for (const element of document.querySelectorAll('[id]'))
+    window[`$${element.id}`] = element;
 
-const inputIssuer = document.querySelector('#issuer');
-const inputLabel = document.querySelector('#label');
-const inputSecret = document.querySelector('#secret');
-
-const qrcode = new QRCode(document.querySelector('.qr-code'));
-
-generateQrCode();
-
-[inputIssuer, inputLabel, inputSecret].forEach(input => {
-    input.addEventListener('input', generateQrCode);
+// Set an event listener which runs once for each tab.
+$tabview.on('load', () => {
+    // Generate the QR code when the tab is activated.
+    if ($tabview.active.name === 'qrcode')
+        generateQrCode();
 });
 
-tabs.forEach((tab, i) => {
-    tab.addEventListener('click', () => {
-        for (const tab of tabs)
-            tab.removeAttribute('active');
-        tab.setAttribute('active', '');
-        const elements = document.querySelectorAll('[id^=tab-]');
-        elements.forEach((element, j) => {
-            element.style.display = i === j ? 'grid' : 'none';
-        });
-    });
+// Generate the QR code when the input fields change.
+[$issuer, $label, $secret].forEach(input => {
+    input.on('input', () => generateQrCode(500));
 });
 
-for (const element of document.querySelectorAll('*')) {
-    if (
-        !element.id
-     || !(element.hasAttribute('session') || element.hasAttribute('local'))
-    ) continue;
-
-    // Get the session or local value for the element.
-    const storage = await getStorage(element);
-
-    if (storage !== undefined) {
-        element.value = storage.value;
-        element.checked = storage.checked;
-    }
-
-    if (element.type === 'checkbox')
-        handleCheckbox(element);
-
-    element.addEventListener('input', ({ target }) => {
-        if (target.hasAttribute('unique')) {
-            const value = new Set(target.value);
-            target.value = [...value].join('');
-        }
-
-        if (target.type === 'number') {
-            const value = target.value.replace(/[^\d]+/, '');
-            target.value = clamp(value, target.min, target.max);
-        }
-
-        if (target.type === 'checkbox')
-            handleCheckbox(target);
-
-        setStorage(target);
-    });
-}
-
-// Alternate between showing the password and hiding it.
-buttonPasswordEye.addEventListener('click', () => {
-    const type = inputPassword.getAttribute('type');
-    inputPassword.setAttribute('type',
-        type === 'password' ? 'text' : 'password'
-    );
-    svgPasswordEye.style.display = type === 'password' ? 'block' : 'none';
-    svgPasswordEyeOff.style.display = type === 'password' ? 'none' : 'block';
+$clearlocal.on('click', () => {
+    chrome.storage.local.clear();
 });
 
-// Copy the current password to the clipboard.
-buttonPasswordCopy.addEventListener('click', () => {
-    const password = inputPassword.value;
-    navigator.clipboard.writeText(password);
+$clearsession.on('click', () => {
+    chrome.storage.session.clear();
 });
 
-buttonSave.addEventListener('click', saveStorage);
-buttonGenerate.addEventListener('click', generatePassword);
-buttonUse.addEventListener('click', usePassword);
+$import.on('click', async event => {
+    event.target.disabled = true;
+    const storage = await chrome.storage.sync.get();
+    await chrome.storage.local.set(storage);
+    await chrome.storage.session.clear();
+    window.close();
+});
 
-/**
- * Save all config options in the local storage.
- *
- * Only elements with the `local` attribute are saved.
- */
-async function saveStorage() {
-    const elements = document.querySelectorAll('[local]');
-    return chrome.storage.local.set(
-        [...elements].reduce(
-            (object, element) => {
-                object[element.id] = {
-                    value: element.value,
-                    checked: element.checked
-                };
-                return object;
-            },
-            { }
-        )
-    );
-}
+$export.on('click', async event => {
+    event.target.disabled = true;
+    const storage = await chrome.storage.local.get();
+    Object.keys(storage).length ?
+    chrome.storage.sync.set(storage) :
+    chrome.storage.sync.clear();
+});
 
-/**
- * Generate the random password.
- */
-function generatePassword() {
+// Save all config options in the local storage.
+// Only elements with the `local` attribute are saved.
+$save.on('click', () => Component.save() );
+
+// Generate the secure random password.
+$generate.on('click', () => {
     const password = [];
     const characters = [];
-    const length = inputLength.value;
-    const exclude = inputExcChars.value.split('');
+    const length = $length.value;
+    const exclude = $excludechars.value.split('');
+    const exhaustive = $exhaustive.checked;
 
-    if (checkboxLetters.checked) {
+    if ($letters.checked) {
         let letters = (
-            selectLettersCase.value === 'lower' ? LETTERS.split('') :
-            selectLettersCase.value === 'upper' ? LETTERS.toUpperCase().split('') :
+            $letterscase.value === 'lower' ? LETTERS.split('') :
+            $letterscase.value === 'upper' ? LETTERS.toUpperCase().split('') :
             LETTERS.split('').concat(LETTERS.toUpperCase().split(''))
         );
-        if (checkboxExc.checked)
+        if ($exclude.checked)
             letters = letters.filter(letter => !exclude.includes(letter));
         characters.push(...letters);
-        exhaustiveRandomizedTransfer(letters, password, inputLettersMin.value);
+        util.randomizedTransfer(letters, password, $lettersmin.value, exhaustive);
     }
 
-    if (checkboxDigits.checked) {
+    if ($digits.checked) {
         let digits = DIGITS.split('');
-        if (checkboxExc.checked)
+        if ($exclude.checked)
             digits = digits.filter(digit => !exclude.includes(digit));
         characters.push(...digits);
-        exhaustiveRandomizedTransfer(digits, password, inputDigitsMin.value);
+        util.randomizedTransfer(digits, password, $digitsmin.value, exhaustive);
     }
 
-    if (checkboxOther.checked) {
-        let other = inputOtherChars.value.split('');
-        if (checkboxExc.checked)
+    if ($other.checked) {
+        let other = $otherchars.value.split('');
+        if ($exclude.checked)
             other = other.filter(char => !exclude.includes(char));
         characters.push(...other);
-        exhaustiveRandomizedTransfer(other, password, inputOtherMin.value);
+        util.randomizedTransfer(other, password, $othermin.value, exhaustive);
     }
 
     // Fill the password with random characters to meet the specified length.
     while (password.length < length)
-        password.push(characters[random(0, characters.length - 1)]);
+        password.push(characters[util.random(0, characters.length - 1)]);
 
     // Ensure the password is not longer than the specified length.
     while (password.length > length)
-        password.splice(random(0, password.length - 1), 1);
+        password.splice(util.random(0, password.length - 1), 1);
 
-    inputPassword.value = shuffle(password).join('');
-    setStorage(inputPassword);
+    $password.value = util.shuffle(password).join('');
+    $password.save('value', $password.value); // session storage
+});
+
+// Set the password input field(s) in the active page.
+// Focus the username input field in the active page.
+// Close the popup.
+$use.on('click', async () => {
+    if ($password.value === '')
+        return $password.focus();
+
+    await executeScript(
+        password => {
+            // Simulate a change on an input element.
+            // https://stackoverflow.com/a/75701621/14822191
+            const setInputValue = ($input, value) => {
+                const prop = Object.getOwnPropertyDescriptor(
+                    window.HTMLInputElement.prototype,
+                    'value'
+                );
+                prop.set.call($input, value); // call the setter
+                $input.dispatchEvent(new Event('input', { bubbles: true }));
+            };
+            const inputUsername = document.querySelector('input[id=username]');
+            const inputsPassword = document.querySelectorAll('input[type=password]');
+            for (const inputPassword of inputsPassword)
+                setInputValue(inputPassword, password);
+            inputUsername?.focus?.();
+        },
+        $password.value
+    );
+
+    window.close();
+});
+
+/**
+ * Generate the QR code or Gravatar image.
+ * @see https://github.com/flipeador/node-otp-2fa
+ * @see https://github.com/google/google-authenticator/wiki/Key-Uri-Format
+ */
+function generateQrCode(delay=0) {
+    clearTimeout(generateQrCode.timer);
+
+    generateQrCode.timer = setTimeout(
+        () => util.startViewTransition(() => {
+            if (!$secret.value && /.+@.+\..+/.test($label.value))
+                return util.getGravatarUrl($label.value).then(url => {
+                    setTimeout(() => $gravatar.src = url);
+                    return new Promise((resolve, reject) => {
+                        $gravatar.onerror = reject;
+                        $gravatar.onload = () => resolve(
+                            util.toggleDisplay($gravatar, $qrcode)
+                        );
+                    });
+                });
+
+            util.toggleDisplay($qrcode, $gravatar);
+            $qrcode.value = getAuthUrl($issuer.value, $label.value, $secret.value);
+        }),
+        delay
+    );
+}
+
+function getAuthUrl(issuer, label, secret) {
+    const iss = encodeURIComponent(issuer);
+    const lab = encodeURIComponent(label);
+    const sec = encodeURIComponent(secret);
+    return (
+        issuer === '' || label === '' ? secret : !secret ? '' :
+        `otpauth://totp/${iss}:${lab}?secret=${sec}&issuer=${iss}`
+    );
 }
 
 /**
- * Set the password in the input field of the active page.
- *
- * Focus the username field of the active page.
- *
- * Close the popup.
+ * Inject a script into an isolated environment in the active page.
+ * @see https://developer.mozilla.org/docs/Mozilla/Add-ons/WebExtensions/API/scripting/executeScript
  */
-async function usePassword() {
-    if (inputPassword.value === '')
-        return inputPassword.focus();
-
+async function executeScript(func, ...args) {
     const tabs = await chrome.tabs.query({
         active: true,
         currentWindow: true
     });
 
-    function func(password) {
-        const inputUsername = document.querySelector('input[id=username]');
-        const inputPassword = document.querySelector('input[type=password]');
-
-        // https://stackoverflow.com/a/75701621/14822191
-        Object.getOwnPropertyDescriptor(
-            window.HTMLInputElement.prototype,
-            'value'
-        ).set.call(
-            document.querySelector('input[type=password]'),
-            password
-        );
-
-        const event = new Event('input', { bubbles: true });
-        inputPassword.dispatchEvent(event);
-
-        inputUsername.focus();
-    }
-
-    await chrome.scripting.executeScript({
+    return chrome.scripting.executeScript({
         target: { tabId: tabs[0].id },
-        func, args: [inputPassword.value]
-    });
-
-    window.close(); // close the popup
-}
-
-/**
- * Get the value for the specified element from the storage.
- */
-async function getStorage(element) {
-    let storage = await chrome.storage.session.get(element.id);
-    if (storage[element.id] === undefined)
-        storage = await chrome.storage.local.get(element.id);
-    return storage[element.id];
-}
-
-/**
- * Save the value for the specified element in the session storage.
- *
- * Only elements with the `session` attribute are saved.
- * @param {HTMLElement} element
- */
-async function setStorage(element) {
-    if (!element.hasAttribute('session'))
-        return;
-    return chrome.storage.session.set({
-        [element.id]: {
-            value: element.value,
-            checked: element.checked
-        }
+        func, args
     });
 }
 
-/**
- * Set the `disabled` attribute for elements associated with the specified checkbox.
- * @param {HTMLInputElement} cb
- */
-function handleCheckbox(cb) {
-    const elements = document.querySelectorAll(`[id*=${cb.id}-]`);
-    for (const element of elements) {
-        element.disabled = !cb.checked;
-        if (element.hasAttribute('focus'))
-            element.focus();
-    }
-}
-
-/**
- * Generate the QR code.
- * @see https://github.com/flipeador/node-otp-2fa
- * @see https://github.com/google/google-authenticator/wiki/Key-Uri-Format
- */
-function generateQrCode() {
-    clearTimeout(generateQrCode.timer);
-    generateQrCode.timer = setTimeout(() => {
-        const issuer = encodeURIComponent(inputIssuer.value);
-        const label = encodeURIComponent(inputLabel.value);
-        const secret = encodeURIComponent(inputSecret.value);
-        qrcode.makeCode(
-            issuer === '' || label === '' ? inputSecret.value : !secret ? '' :
-            `otpauth://totp/${issuer}:${label}?secret=${secret}&issuer=${issuer}`
-        );
-    }, 500);
-}
-
-/**
- * Randomly selects elements from `source` and transfers them to `target`.
- *
- * Ensures all elements from `source` are used before repeating any.
- * @param {array} source
- * The array to select elements from.
- * @param {array} target
- * The array to add selected elements to.
- * @param {number} count
- * The number of elements to select and transfer.
- * @returns {array}
- */
-function exhaustiveRandomizedTransfer(source, target, count) {
-    let array = source.slice();
-    for (let i = 0; i < count; ++i) {
-        if (array.length === 0) array = source.slice();
-        target.push(array.splice(random(0, array.length - 1), 1)[0]);
-    }
-    return target;
-}
-
-/**
- * Shuffle an array.
- * @param {array} target
- * @returns {array}
- */
-function shuffle(target) {
-    for (let i = target.length - 1; i > 0; --i) {
-        const j = random(0, i);
-        [target[i], target[j]] = [target[j], target[i]];
-    }
-    return target;
-}
-
-/**
- * Generate a random number in a given range.
- * @param {number} min
- * @param {number} max
- * @see https://developer.mozilla.org/docs/Web/API/Crypto/getRandomValues
- */
-function random(min, max) {
-    const array = new Uint32Array(1);
-    window.crypto.getRandomValues(array);
-    const randomValue = array[0] / (0xFFFFFFFF + 1);
-    return Math.floor(randomValue * (max - min + 1)) + min;
-}
-
-/**
- * Clamp a number between a minimum and maximum value.
- * @param {any} value
- * @param {number} min
- * @param {number} max
- * @param {number} def
- * @returns {number}
- */
-function clamp(value, min, max, def=NaN) {
-    value = Number(value); min ||= 0; max ||= 99;
-    value = value > max ? max : value < min ? min : value;
-    return isNaN(value) ? def : value;
-}
+window.document.body.style.removeProperty('display');

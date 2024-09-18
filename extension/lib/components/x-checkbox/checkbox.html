@@ -1,0 +1,23 @@
+<!-- Container -->
+<div
+  id="container"
+  part="container">
+  <!-- Input -->
+  <div
+    id="input"
+    part="input"
+    role="checkbox"
+    translate="no"
+    spellcheck="false"
+    aria-labelledby="label">
+    <slot name="checked"></slot>
+    <slot name="unchecked"></slot>
+    <slot name="intermediate"></slot>
+  </div>
+  <!-- Label -->
+  <div
+    id="label"
+    part="label">
+    <slot></slot>
+  </div>
+</div>

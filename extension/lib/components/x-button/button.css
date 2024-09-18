@@ -1,0 +1,32 @@
+x-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: .5em;
+  border-radius: 5px;
+  background: var(--clr-background);
+  box-shadow: 0 0 2px var(--clr-border);
+  transition-duration: .2s;
+  transition-timing-function: linear;
+  transition-property: background-color, color;
+  cursor: pointer;
+  user-select: none;
+
+  &:hover {
+    background: var(--clr-primary);
+  }
+
+  &:active {
+    box-shadow:
+      0 0 2px var(--clr-border),
+      0 0 5px black inset;
+  }
+
+  &:focus-visible {
+    outline: 1px dashed var(--clr-focus);
+  }
+
+  &:hover {
+    color: var(--clr-text-dark);
+  }
+}

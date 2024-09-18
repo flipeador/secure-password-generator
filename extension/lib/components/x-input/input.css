@@ -1,0 +1,107 @@
+:host {
+  height: 1em;
+}
+
+#container {
+  display: flex;
+  height: 100%;
+  gap: .5em;
+  padding-inline: .5em;
+  align-items: center;
+  border-radius: 5px;
+  background: var(--clr-background);
+  box-shadow: 0 0 2px var(--clr-border);
+  transition: background-color .2s linear;
+}
+
+#container:has(:focus-visible) {
+  outline: 1px dashed var(--clr-focus);
+}
+
+#container:hover {
+  background: var(--clr-hover);
+}
+
+#input {
+  flex: 1;
+  min-width: 2ch;
+  background: transparent;
+}
+
+#container > :not(#input) {
+  display: none;
+  height: 100%;
+  align-items: center;
+  user-select: none;
+}
+
+#container > :not(#input) > svg {
+  transition-property: color, scale, rotate;
+  transition-timing-function: linear;
+  transition-duration: .2s;
+}
+
+svg,
+::slotted(svg) {
+  display: block;
+  width: 1.5em;
+  height: 100%;
+  filter: drop-shadow(2px 2px 2px black);
+}
+
+::slotted(svg[focus]) {
+  filter: drop-shadow(0 0 5px color-mix(in srgb, currentColor 20%, transparent));
+}
+
+/* Eye Checkbox */
+
+#input.password ~ #eye {
+  display: block;
+}
+
+#eye > svg:hover,
+#eye:focus-visible > svg {
+  color: var(--clr-primary);
+  scale: 1.2;
+}
+
+#eye[aria-checked="true"] > svg:first-child {
+  display: none;
+}
+
+#eye[aria-checked="false"] > svg:last-child {
+  display: none;
+}
+
+/* Arrow Buttons */
+
+#input[inputmode="numeric"] ~ #arrows {
+  display: block;
+}
+
+#arrows > svg {
+  width: 1em;
+  height: 50%;
+}
+
+#arrows > svg:hover {
+  color: var(--clr-primary);
+  scale: 1.5;
+}
+
+/* Copy Button */
+
+#input.copy ~ #copy {
+  display: flex;
+}
+
+#copy > svg {
+  height: 80%;
+}
+
+#copy > svg:hover,
+#copy:focus-visible > svg {
+  color: var(--clr-primary);
+  scale: 1.13;
+  rotate: -5deg;
+}

@@ -1,0 +1,52 @@
+::slotted(x-tab) {
+  display: block;
+  padding: 1em;
+  text-wrap: nowrap;
+}
+
+::slotted(x-tabpanel) {
+  padding: 1em;
+}
+
+#container {
+  display: grid;
+}
+
+#scrollable {
+  overflow: hidden;
+  overscroll-behavior: contain;
+}
+
+#tabs {
+  display: flex;
+  border-bottom: 1px solid transparent;
+  box-shadow: 0 2px 5px black;
+  user-select: none;
+
+  & > div {
+    position: relative;
+    cursor: pointer;
+
+    &::before {
+      content: "";
+      position: absolute;
+      inset: auto auto -1px auto;
+      width: 100%;
+      height: 1px;
+      background: gray;
+    }
+
+    &[aria-selected=true]::before {
+      background: var(--clr-primary);
+    }
+
+    &:focus, &:hover {
+      color: var(--clr-primary);
+    }
+  }
+
+  & > #empty {
+    flex: 1;
+    pointer-events: none;
+  }
+}
