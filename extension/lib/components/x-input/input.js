@@ -71,11 +71,11 @@ class Input extends ShadowComponent {
         this.$input.focus();
     }
 
-    onChange(event) {
-        const value = event.target.value;
-        // Save the current value in the session storage.
+    onChange() {
+        this.value = this.text;
+        const value = this.value;
         if (value || value === '' || value === 0)
-            event.target.save('value', value);
+            this.save('value', value);
     }
 
     onContainerClick() {
@@ -85,7 +85,6 @@ class Input extends ShadowComponent {
     onInputBlur() {
         const icon = this.querySelector('[slot=icon]');
         icon?.removeAttribute?.('focus');
-        this.value = this.text;
     }
 
     onInputFocus() {
