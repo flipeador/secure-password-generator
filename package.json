@@ -10,8 +10,8 @@
     "lint": "eslint ."
   },
   "devDependencies": {
-    "@stylistic/eslint-plugin": "^2.7.2",
-    "chrome-types": "^0.1.301",
+    "@stylistic/eslint-plugin": "^2.8.0",
+    "chrome-types": "^0.1.306",
     "eslint": "^9.10.0",
     "globals": "^15.9.0"
   },

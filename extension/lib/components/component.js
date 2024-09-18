@@ -2,26 +2,11 @@ import * as util from '../util.js';
 
 const PATH = 'lib/components';
 
-function onFocusableKeyDown(event) {
-    if (event.key === ' ') {
-        event.preventDefault();
-        event.stopPropagation();
-        event.target.click();
-    }
-}
-
 export class Component extends HTMLElement {
     static promises = [];
     promises = [];
 
-    constructor(name) {
-        super();
-        this._name = name;
-        this.loadCSS('../component.css');
-        this.attachShadow({ mode: 'open' });
-    }
-
-    static join() {
+    static ready() {
         return Promise.all(Component.promises);
     }
 
@@ -30,43 +15,44 @@ export class Component extends HTMLElement {
         for (const element of elements) element.save();
     }
 
-    #pushPromise() {
+    _pushPromise() {
         const promise = util.createPromise();
         Component.promises.push(promise);
         this.promises.push(promise);
         return promise;
     }
 
-    #popPromise(promise) {
+    _popPromise(promise) {
         promise.resolve();
         this.promises.splice(this.promises.indexOf(promise), 1);
     }
 
-    async #loadStorage() {
+    async _loadStorage() {
         let storage = await chrome.storage.session.get(this.id);
         if (storage[this.id] === undefined)
             storage = await chrome.storage.local.get(this.id);
         this.storage = storage[this.id] ?? { };
     }
 
-    join() {
+    ready() {
         return Promise.all(this.promises);
     }
 
-    defineAttribute(name, defval) {
+    defineAttribute(name, defval, force) {
         const value =
-            this.storage[name] ??
-            this.getAttribute(name) ??
+            this.storage?.[name] ??
+            this.get(name) ??
             defval;
-        this.removeAttribute(name);
-        if (value) this[name] = value;
+        this.remove(name);
+        if (value || force)
+            this[name] = value;
     }
 
     defineToggleAttribute(name) {
         const value =
-            this.storage[name] ??
-            this.hasAttribute(name);
-        this.removeAttribute(name);
+            this.storage?.[name] ??
+            this.has(name);
+        this.remove(name);
         if (value) this[name] = true;
     }
 
@@ -74,13 +60,164 @@ export class Component extends HTMLElement {
         this.defineToggleAttribute('disabled');
     }
 
-    /**
-     * Fetch a file and return its text content.
-     * @returns {Promise<string>}
-     */
     async fetch(path) {
-        const url = chrome.runtime.getURL(`${PATH}/${this._name}/${path}`);
-        return await fetch(url).then(response => response.text());
+        path = `x-${this.constructor.name.toLowerCase()}/${path}`;
+        const url = chrome.runtime.getURL(`${PATH}/${path}`);
+        return fetch(url).then(response => response.text());
+    }
+
+    async save(key, value) {
+        // Local storage.
+        if (key === undefined) {
+            if (!this.has('local')) return;
+            return chrome.storage.local.set({
+                [this.id]: this.storage
+            });
+        }
+        // Session storage.
+        if (!this.has('session')) return;
+        typeof(key) === 'string' ?
+        this.storage[key] = value :
+        Object.assign(this.storage, key);
+        return chrome.storage.session.set({
+            [this.id]: this.storage
+        });
+    }
+
+    get disabled() {
+        return this.has('disabled');
+    }
+
+    /**
+     * Set the disabled state of the container element. \
+     * This element is marked as `inert`, indicating the browser to ignore it.
+     * @see https://developer.mozilla.org/docs/Web/HTML/Attributes/disabled
+     * @see https://developer.mozilla.org/docs/Web/HTML/Global_attributes/inert
+     */
+    set disabled(value) {
+        this.inert = !!value;
+        this.toggle('disabled', !!value);
+        this.ready?.().then(() => {
+            this.$container?.toggle?.('disabled', !!value);
+        });
+    }
+
+    get name() {
+        return this.get('name');
+    }
+
+    set name(value) {
+        this.set('name', value);
+    }
+
+    /**
+     * Set a function that will be called whenever the specified event is delivered. \
+     * The listener function is bound to the element's shadow root host, or `this`.
+     * @see https://developer.mozilla.org/docs/Web/API/EventTarget/addEventListener
+     */
+    on(event, listener, options) {
+        const root = this.getRootNode();
+        listener = listener.bind(root.host ?? this);
+        this.addEventListener(event, listener, options);
+        return listener;
+    }
+
+    /**
+     * Removes the event listener with the same type, callback, and options.
+     * @see https://developer.mozilla.org/docs/Web/API/EventTarget/removeEventListener
+     */
+    off(type, listener, options) {
+        this.removeEventListener(type, listener, options);
+    }
+
+    /**
+     * Focus the element, if it can be focused.
+     * @see https://developer.mozilla.org/docs/Web/API/HTMLElement/focus
+     */
+    focus(options={}) {
+        this.__focus(options);
+        if (!options.preventScroll)
+            this.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    /**
+     * Check if the element is focused within the document or shadow root.
+     * @see https://developer.mozilla.org/docs/Web/API/Node/getRootNode
+     * @see https://developer.mozilla.org/docs/Web/API/Document/activeElement
+     */
+    isFocused() {
+        return this.getRootNode().activeElement === this;
+    }
+
+    /**
+     * Allow or prevent the element from being focusable.
+     * @see https://developer.mozilla.org/docs/Web/HTML/Global_attributes/tabindex
+     */
+    setFocusable(value, clickKeyList) {
+        this.off('keydown', this._focusableFn);
+        this._focusableFn = (
+            clickKeyList &&
+            this.on('keydown', event => {
+                if (clickKeyList.includes(event.key)) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    event.target.click();
+                }
+            })
+        );
+        this.toggle('tabindex', value || value === 0, value);
+    }
+
+    /**
+     * Synchronously send an event invoking the affected event listeners.
+     * @param {string} event
+     * @param {{bubbles,cancelable,composed,detail}} options
+     * @returns {boolean}
+     * Returns `false` if the events has been canceled via its `event.preventDefault()` method. \
+     * If the event is canceled, the default action should not be taken as it normally would be. \
+     * Returns `true` if the event is not cancelable or its `preventDefault()` method was not invoked.
+     * @see https://javascript.info/shadow-dom-events
+     * @see https://developer.mozilla.org/docs/Web/API/EventTarget/dispatchEvent
+     */
+    dispatch(event, options={}) {
+        event = new CustomEvent(event, options);
+        return this.dispatchEvent(event);
+    }
+
+    has(name) {
+        return this.hasAttribute(name);
+    }
+
+    get(name) {
+        return this.getAttribute(name);
+    }
+
+    set(name, value='') {
+        const attr = this.get(name);
+        if (value === null) this.remove(name);
+        else this.setAttribute(name, value ?? '');
+        return attr ?? null;
+    }
+
+    remove(name) {
+        const attr = this.get(name);
+        this.removeAttribute(name);
+        return attr ?? null;
+    }
+
+    toggle(name, force, value) {
+        if (force === undefined)
+            return this.toggle(name, !this.has(name), value);
+        return force ? this.set(name, value) : this.remove(name);
+    }
+}
+
+export class ShadowComponent extends Component {
+    constructor() {
+        super();
+        this.loadCSS('../component.css');
+        this.attachShadow({ mode: 'open' });
+        this.shadowRoot.innerHTML = '<slot></slot>';
     }
 
     /**
@@ -101,131 +238,29 @@ export class Component extends HTMLElement {
      * @see https://developer.mozilla.org/docs/Web/API/Element/innerHTML
      */
     async loadHTML(name) {
-        const promise = this.#pushPromise();
+        const promise = this._pushPromise();
         this.shadowRoot.innerHTML = await this.fetch(name);
         for (const element of this.shadowRoot.querySelectorAll('*')) {
             if (element.id) this[`$${element.id}`] = element;
-            if (element instanceof Component) await element.join();
+            if (element instanceof Component) await element.ready();
         }
-        await this.#loadStorage();
+        await this._loadStorage();
         await this.main?.(name);
-        this.#popPromise(promise);
-    }
-
-    async save(key, value) {
-        // Local storage.
-        if (key === undefined) {
-            if (!this.hasAttribute('local'))
-                return;
-            return chrome.storage.local.set({
-                [this.id]: this.storage
-            });
-        }
-        // Session storage.
-        if (!this.hasAttribute('session'))
-            return;
-        typeof(key) === 'string' ?
-        this.storage[key] = value :
-        Object.assign(this.storage, key);
-        return chrome.storage.session.set({
-            [this.id]: this.storage
-        });
-    }
-
-    get disabled() {
-        return this.hasAttribute('disabled');
-    }
-
-    /**
-     * Set the disabled state of the container element. \
-     * This element is marked as `inert`, indicating the browser to ignore it.
-     * @see https://developer.mozilla.org/docs/Web/HTML/Attributes/disabled
-     * @see https://developer.mozilla.org/docs/Web/HTML/Global_attributes/inert
-     */
-    set disabled(value) {
-        this.inert = !!value;
-        this.toggleAttribute('disabled', !!value);
-        this.join?.(this.promises).then(() => {
-            this.$container.toggleAttribute('disabled', !!value);
-        });
-    }
-
-    /**
-     * Set a function that will be called whenever the specified event is delivered. \
-     * The listener function is bound to the element's shadow root host, or `undefined`.
-     * @see https://developer.mozilla.org/docs/Web/API/EventTarget/addEventListener
-     */
-    on(event, listener, options) {
-        const root = this.getRootNode();
-        listener = listener.bind(root.host);
-        this.addEventListener(event, listener, options);
-    }
-
-    /**
-     * Get the selection within the document or shadow root.
-     * @returns {Selection}
-     * @see https://developer.mozilla.org/docs/Web/API/Window/getSelection
-     */
-    getSelection() {
-        try { return this.shadowRoot.getSelection(); } // chrome
-        catch { return window.document.getSelection(); } // firefox
-    }
-
-    /**
-     * Check if the element is focused within the document or shadow root.
-     * @see https://developer.mozilla.org/docs/Web/API/Node/getRootNode
-     * @see https://developer.mozilla.org/docs/Web/API/Document/activeElement
-     */
-    isFocused() {
-        return this.getRootNode().activeElement === this;
-    }
-
-    /**
-     * Allow or prevent the element from being focusable.
-     * @see https://developer.mozilla.org/docs/Web/HTML/Global_attributes/tabindex
-     */
-    setFocusable(value, clickOnSpaceKeyDown) {
-        if (!value) {
-            this.removeEventListener('keydown', onFocusableKeyDown);
-            return this.removeAttribute('tabindex');
-        }
-        if (clickOnSpaceKeyDown)
-            this.addEventListener('keydown', onFocusableKeyDown);
-        this.setAttribute('tabindex', '0');
-    }
-
-    /**
-     * Synchronously send an event invoking the affected event listeners.
-     * @param {string} event
-     * @param {{bubbles,cancelable,composed,detail}} options
-     * @returns {boolean}
-     * Returns `false` if the events has been canceled via its `event.preventDefault()` method. \
-     * If the event is canceled, the default action should not be taken as it normally would be. \
-     * Returns `true` if the event is not cancelable or its `preventDefault()` method was not invoked.
-     * @see https://javascript.info/shadow-dom-events
-     * @see https://developer.mozilla.org/docs/Web/API/EventTarget/dispatchEvent
-     */
-    dispatch(event, options={}) {
-        event = new CustomEvent(event, options);
-        return this.dispatchEvent(event);
-    }
-
-    toggleAttribute(name, force, value='') {
-        if (force)
-            return !this.setAttribute(name, value);
-        if (!force && force !== undefined)
-            return !!this.removeAttribute(name);
-        const has = this.hasAttribute(name);
-        return this.toggleAttribute(name, !has, value);
+        this._popPromise(promise);
     }
 }
 
-util.copyMethod('save', Component, Element);
 util.copyMethod('on', Component, Element);
-util.copyMethod('isFocused', Component, Element);
-util.copyMethod('setFocusable', Component, Element);
-util.copyMethod('toggleAttribute', Component, Element);
+util.copyMethod('off', Component, Element);
+util.copyMethod('has', Component, Element);
+util.copyMethod('get', Component, Element);
+util.copyMethod('set', Component, Element);
+util.copyMethod('remove', Component, Element);
+util.copyMethod('toggle', Component, Element);
+
+util.copyMethod('save', Component, HTMLElement);
+util.copyMethod('focus', Component, HTMLElement);
+util.copyMethod('isFocused', Component, HTMLElement);
+util.copyMethod('setFocusable', Component, HTMLElement);
 
 util.copyProperty('disabled', Component, Element);
-
-window.document.Component = Component;

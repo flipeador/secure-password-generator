@@ -1,44 +1,47 @@
 <!doctype html>
 <html>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="../lib/components/component.css">
+  <link rel="stylesheet" href="../lib/components/x-link/link.css">
+  <link rel="stylesheet" href="../lib/components/x-button/button.css">
   <link rel="stylesheet" href="popup.css">
   <body style="display: none;">
     <!-- Background -->
-    <div class="background">
+    <div id="background">
       <div></div>
     </div>
-    <!-- Nav -->
-    <nav class="tab" tab="1">
-      <button open>Password Generator</button>
-      <button name="generate-qr-code">QR Code Generator</button>
-    </nav>
-    <!-- Main -->
-    <main>
-      <!-- Password Generator -->
-      <div class="tab-content" tab="1-1" open>
+    <!-- Tab View -->
+    <x-tabview id="tabview">
+      <!-- Tab List -->
+      <x-tab name="password" active>Password Generator</x-tab>
+      <x-tab name="qrcode">QR Code Generator</x-tab>
+      <x-tab name="about">About (?)</x-tab>
+      <!-- Tab Panel: Password Generator -->
+      <x-tabpanel name="password">
         <!-- Length -->
-        <span aria-hidden="true">Password length:</span>
+        <span>Password length:</span>
         <x-input
           id="length"
           type="numeric"
           min="1" max="99" value="20"
           session local>
         </x-input>
-        <span aria-hidden="true"></span>
+        <div aria-hidden="true"></div>
         <!-- Letters -->
         <x-checkbox
           id="letters"
-          for="letters-case letters-min"
+          for="letterscase lettersmin"
           nowrap checked
           local session>
           Letters (A-Z):
         </x-checkbox>
-        <select id="letters-case" value="3" session local>
+        <select id="letterscase" value="3" session local>
           <option value="upper">Uppercase</option>
           <option value="lower">Lowercase</option>
           <option value="mixed" selected>MixedCase</option>
         </select>
         <x-input
-          id="letters-min"
+          id="lettersmin"
           type="numeric"
           min="1" max="99" value="10"
           title="Minimum number of letters"
@@ -47,14 +50,14 @@
         <!-- Digits -->
         <x-checkbox
           id="digits"
-          for="digits-min"
+          for="digitsmin"
           nowrap checked
           session local>
           Digits (0-9):
         </x-checkbox>
-        <span aria-hidden="true"></span>
+        <div aria-hidden="true"></div>
         <x-input
-          id="digits-min"
+          id="digitsmin"
           type="numeric"
           min="1" max="99" value="10"
           title="Minimum number of digits"
@@ -63,19 +66,19 @@
         <!-- Other characters -->
         <x-checkbox
           id="other"
-          for="other-min other-chars"
+          for="othermin otherchars"
           nowrap
           session local>
           Other characters:
         </x-checkbox>
         <x-input
-          id="other-chars"
+          id="otherchars"
           value="&quot;'!#$%&()*+,-./:;<=>?@[\]^_`{|}~"
           unique focus
           session local>
         </x-input>
         <x-input
-          id="other-min"
+          id="othermin"
           type="numeric"
           min="1" max="99" value="5"
           title="Minimum number of characters"
@@ -83,47 +86,49 @@
         </x-input>
         <!-- Excluded characters -->
         <x-checkbox
-          id="exc"
-          for="exc-chars"
-          nowrap
-          session local>
+          id="exclude"
+          for="excludechars"
+          nowrap session local>
           Excluded characters:
         </x-checkbox>
         <x-input
-          id="exc-chars"
+          id="excludechars"
           unique focus
           session local>
         </x-input>
-        <span aria-hidden="true"></span>
+        <div aria-hidden="true"></div>
         <!-- Exhaustive randomized transfer -->
-        <x-checkbox id="exhaustive-randomized-transfer" checked session local>
+        <x-checkbox id="exhaustive" checked session local>
           Ensures all characters are used before repeating any.
         </x-checkbox>
         <!-- Password -->
         <x-input
           id="password"
           type="password"
-          flags="copy"
           title="The generated password"
-          readonly session>
+          flags="copy" readonly session>
           <svg slot="icon">
-            <use xlink:href="#key-round"></use>
+            <use xlink:href="#sym-lock-keyhole"></use>
           </svg>
         </x-input>
         <!-- Buttons -->
-        <button id="save">Save options</button>
-        <button id="generate">Generate password</button>
-        <button id="use">Use</button>
-      </div>
-      <!-- QR Code Generator -->
-      <div class="tab-content" tab="1-2">
+        <x-button
+          id="save"
+          title="Save options in the local storage">
+          Save options
+        </x-button>
+        <x-button id="generate">Generate password</x-button>
+        <x-button id="use">Use</x-button>
+      </x-tabpanel>
+      <!-- Tab Panel: QR Code Generator -->
+      <x-tabpanel name="qrcode">
         <x-input
           id="issuer"
           placeholder="Google"
           title="Account provider or service"
           session>
           <svg slot="icon">
-            <use xlink:href="#building"></use>
+            <use xlink:href="#sym-building"></use>
           </svg>
         </x-input>
         <x-input
@@ -132,7 +137,7 @@
           title="Account name or email"
           session>
           <svg slot="icon">
-            <use xlink:href="#mail"></use>
+            <use xlink:href="#sym-mail"></use>
           </svg>
         </x-input>
         <x-input
@@ -141,30 +146,85 @@
           title="Arbitrary key value encoded in Base32"
           session>
           <svg slot="icon">
-            <use xlink:href="#key-round"></use>
+            <use xlink:href="#sym-key-round"></use>
           </svg>
         </x-input>
-        <div id="qr-code">
-      </div>
-    </main>
+        <x-qrcode
+          id="qrcode"
+          color="transparent"
+          background="#FFFFFFC7"
+          aria-describedby="issuer label secret">
+        </x-qrcode>
+        <img id="gravatar" aria-describedby="label">
+      </x-tabpanel>
+      <!-- Tab Panel: About -->
+      <x-tabpanel name="about">
+        <h1>Secure Password Generator</h1>
+        <p>Generate secure random passwords and QR codes.</p>
+        <div>
+          <x-button id="clearlocal">
+            Clear local storage
+          </x-button>
+          <x-button id="clearsession">
+            Clear session storage
+          </x-button>
+        </div>
+        <div>
+          <x-button
+            id="import"
+            title="Import cloud storage to local storage">
+            <svg style="height: 80%; aspect-ratio: 1;" aria-hidden="true">
+              <use xlink:href="#sym-cloud-download"></use>
+            </svg>
+            Import
+          </x-button>
+          <x-button
+            id="export"
+            title="Export local storage to cloud storage">
+            <svg style="height: 80%; aspect-ratio: 1;" aria-hidden="true">
+              <use xlink:href="#sym-cloud-upload"></use>
+            </svg>
+            Export
+          </x-button>
+        </div>
+        <x-button
+          name="github"
+          href="https://github.com/flipeador/secure-password-generator">
+          <svg style="height: 80%; aspect-ratio: 1;" aria-hidden="true">
+            <use xlink:href="#sym-github"></use>
+          </svg>
+          GitHub
+          <svg style="height: 80%; aspect-ratio: 1;" aria-hidden="true">
+            <use xlink:href="#sym-external-link"></use>
+          </svg>
+        </x-button>
+      </x-tabpanel>
+    </x-tabview>
     <!-- SVG -->
     <svg style="display: none">
       <defs>
+        <!-- Lock Keyhole -->
+        <!-- https://lucide.dev/icons/lock-keyhole -->
+        <symbol id="sym-lock-keyhole" viewBox="0 0 24 24" fill="none" stroke="gold" stroke-width="2">
+          <circle cx="12" cy="16" r="1"/>
+          <rect x="3" y="10" width="18" height="12" rx="2"/>
+          <path d="M7 10V7a5 5 0 0 1 10 0v3"/>
+        </symbol>
         <!-- Key Round -->
         <!-- https://lucide.dev/icons/key-round -->
-        <symbol id="key-round" viewBox="0 0 24 24" fill="none" stroke="gold" stroke-width="2">
+        <symbol id="sym-key-round" viewBox="0 0 24 24" fill="none" stroke="gold" stroke-width="2">
           <path d="M2.586 17.414A2 2 0 0 0 2 18.828V21a1 1 0 0 0 1 1h3a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h1a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h.172a2 2 0 0 0 1.414-.586l.814-.814a6.5 6.5 0 1 0-4-4z"/>
           <circle cx="16.5" cy="7.5" r=".5" fill="currentColor"/>
         </symbol>
         <!-- Mail -->
         <!-- https://lucide.dev/icons/mail -->
-        <symbol id="mail" viewBox="0 0 24 24" fill="none" stroke="cornflowerblue" stroke-width="2">
+        <symbol id="sym-mail" viewBox="0 0 24 24" fill="none" stroke="cornflowerblue" stroke-width="2">
           <rect width="20" height="16" x="2" y="4" rx="2"/>
           <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
         </symbol>
         <!-- Building 2 -->
         <!-- https://lucide.dev/icons/building-2 -->
-        <symbol id="building" viewBox="0 0 24 24" fill="none" stroke="coral" stroke-width="2">
+        <symbol id="sym-building" viewBox="0 0 24 24" fill="none" stroke="coral" stroke-width="2">
           <path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/>
           <path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/>
           <path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"/>
@@ -173,12 +233,39 @@
           <path d="M10 14h4"/>
           <path d="M10 18h4"/>
         </symbol>
+        <symbol id="sym-github" viewBox="0 0 256 250" fill="currentColor">
+          <path d="M128.001 0C57.317 0 0 57.307 0 128.001c0 56.554 36.676 104.535 87.535 121.46 6.397 1.185 8.746-2.777 8.746-6.158 0-3.052-.12-13.135-.174-23.83-35.61 7.742-43.124-15.103-43.124-15.103-5.823-14.795-14.213-18.73-14.213-18.73-11.613-7.944.876-7.78.876-7.78 12.853.902 19.621 13.19 19.621 13.19 11.417 19.568 29.945 13.911 37.249 10.64 1.149-8.272 4.466-13.92 8.127-17.116-28.431-3.236-58.318-14.212-58.318-63.258 0-13.975 5-25.394 13.188-34.358-1.329-3.224-5.71-16.242 1.24-33.874 0 0 10.749-3.44 35.21 13.121 10.21-2.836 21.16-4.258 32.038-4.307 10.878.049 21.837 1.47 32.066 4.307 24.431-16.56 35.165-13.12 35.165-13.12 6.967 17.63 2.584 30.65 1.255 33.873 8.207 8.964 13.173 20.383 13.173 34.358 0 49.163-29.944 59.988-58.447 63.157 4.591 3.972 8.682 11.762 8.682 23.704 0 17.126-.148 30.91-.148 35.126 0 3.407 2.304 7.398 8.792 6.14C219.37 232.5 256 184.537 256 128.002 256 57.307 198.691 0 128.001 0Zm-80.06 182.34c-.282.636-1.283.827-2.194.39-.929-.417-1.45-1.284-1.15-1.922.276-.655 1.279-.838 2.205-.399.93.418 1.46 1.293 1.139 1.931Zm6.296 5.618c-.61.566-1.804.303-2.614-.591-.837-.892-.994-2.086-.375-2.66.63-.566 1.787-.301 2.626.591.838.903 1 2.088.363 2.66Zm4.32 7.188c-.785.545-2.067.034-2.86-1.104-.784-1.138-.784-2.503.017-3.05.795-.547 2.058-.055 2.861 1.075.782 1.157.782 2.522-.019 3.08Zm7.304 8.325c-.701.774-2.196.566-3.29-.49-1.119-1.032-1.43-2.496-.726-3.27.71-.776 2.213-.558 3.315.49 1.11 1.03 1.45 2.505.701 3.27Zm9.442 2.81c-.31 1.003-1.75 1.459-3.199 1.033-1.448-.439-2.395-1.613-2.103-2.626.301-1.01 1.747-1.484 3.207-1.028 1.446.436 2.396 1.602 2.095 2.622Zm10.744 1.193c.036 1.055-1.193 1.93-2.715 1.95-1.53.034-2.769-.82-2.786-1.86 0-1.065 1.202-1.932 2.733-1.958 1.522-.03 2.768.818 2.768 1.868Zm10.555-.405c.182 1.03-.875 2.088-2.387 2.37-1.485.271-2.861-.365-3.05-1.386-.184-1.056.893-2.114 2.376-2.387 1.514-.263 2.868.356 3.061 1.403Z"/>
+        </symbol>
+        <!-- External Link -->
+        <!-- https://lucide.dev/icons/external-link -->
+        <symbol id="sym-external-link" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M15 3h6v6"/>
+          <path d="M10 14 21 3"/>
+          <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+        </symbol>
+        <!-- Cloud Download -->
+        <!-- https://lucide.dev/icons/cloud-download -->
+        <symbol id="sym-cloud-download" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M12 13v8l-4-4"/>
+          <path d="m12 21 4-4"/>
+          <path d="M4.393 15.269A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.436 8.284"/>
+        </symbol>
+        <!-- Cloud Upload -->
+        <!-- https://lucide.dev/icons/cloud-upload -->
+        <symbol id="sym-cloud-upload" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M12 13v8"/>
+          <path d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242"/>
+          <path d="m8 17 4-4 4 4"/>
+        </symbol>
       </defs>
     </svg>
     <!-- SCRIPTS -->
-    <script src="../lib/qrcode.js" defer></script>
-    <script type="module" src="../lib/components/x-checkbox/checkbox.js"></script>
+    <script type="module" src="../lib/components/x-link/link.js"></script>
+    <script type="module" src="../lib/components/x-button/button.js"></script>
     <script type="module" src="../lib/components/x-input/input.js"></script>
-    <script type="module" src="popup.js"></script>
+    <script type="module" src="../lib/components/x-tabview/tabview.js"></script>
+    <script type="module" src="../lib/components/x-checkbox/checkbox.js"></script>
+    <script type="module" src="../lib/components/x-qrcode/qrcode.js"></script>
+    <script type="module" src="./popup.js"></script>
   </body>
 </html>

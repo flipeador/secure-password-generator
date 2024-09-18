@@ -27,7 +27,7 @@ Items in the local storage area stored locally and cleared when the extension is
 
 The `password` input field is never stored in the local storage.
 
-The UI and functionality is based on [`@mar-kolya\secure-password-generator`][spg].
+The UI and functionality is inspired by [`@mar-kolya\secure-password-generator`][spg].
 
 ### QR Code Generator
 
@@ -41,7 +41,7 @@ Generate a QR code given a `issuer`, `label` and `secret` value:
 
 1. If the `issuer` or `label` fields are empty, generates a QR code just for the text in the `secret` input field.
 2. If `label` is an email and `secret` is empty, gets the [Gravatar profile image][gravatar] for the email address using sha256.
-3. If all fields are provided, generates a QR code using the [`otpauth://totp/` URI scheme][kuf], for your [authentication app][auth].
+3. If all fields are provided, generates a QR code using the [`otpauth://totp/` URI scheme][kuf], for your [2FA][2fa] [auth app][auth].
 
 The QR code input fields are never stored in the local storage.
 
@@ -53,5 +53,6 @@ See the [license file](LICENSE) for details.
 <!-- Reference Links -->
 [spg]: https://github.com/mar-kolya/secure-password-generator
 [kuf]: https://github.com/google/google-authenticator/wiki/Key-Uri-Format
+[2fa]: https://en.wikipedia.org/wiki/Multi-factor_authentication
 [auth]: https://en.wikipedia.org/wiki/Authenticator
 [gravatar]: https://docs.gravatar.com/api/avatars/images

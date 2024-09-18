@@ -4,7 +4,6 @@
   part="container"
   translate="no">
   <!-- Icon -->
-  <!-- Light DOM SVG: slot="icon" -->
   <slot
     id="icon"
     part="icon"
@@ -40,6 +39,7 @@
       id="up"
       part="up"
       role="button"
+      tabindex="-1"
       aria-label="Increase value by one step">
       <use xlink:href="#chevron-up"></use>
     </svg>
@@ -47,6 +47,7 @@
       id="down"
       part="down"
       role="button"
+      tabindex="-1"
       aria-label="Decrease value by one step">
       <use xlink:href="#chevron-down"></use>
     </svg>

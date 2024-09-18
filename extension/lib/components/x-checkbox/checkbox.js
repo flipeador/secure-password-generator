@@ -1,7 +1,5 @@
 import * as util from '../../util.js';
-import { Component } from '../component.js';
-
-const NAME = 'x-checkbox';
+import { ShadowComponent } from '../component.js';
 
 /**
  * Toggle the disabled state of all elements associated with the specified checkbox. \
@@ -21,9 +19,9 @@ function handleCheckBoxFor(checkbox) {
  * Allow users to alternate between ON/OFF, and an optional indeterminate state.
  * @see https://developer.mozilla.org/docs/Web/Accessibility/ARIA/Roles/checkbox_role
  */
-class CheckBox extends Component {
+class CheckBox extends ShadowComponent {
     constructor() {
-        super(NAME);
+        super();
         this.type = 'checkbox';
         this.loadCSS('checkbox.css');
         this.loadHTML('checkbox.html');
@@ -34,14 +32,14 @@ class CheckBox extends Component {
 
         this.on('change', this.onChange);
 
-        this.$input.setFocusable(true, true);
+        this.$input.setFocusable(0, [' ']);
 
         this.$label.on('click', this.onInputClick);
         this.$input.on('click', this.onInputClick);
 
         this.value = (this.storage.value ?? (
-            this.hasAttribute('indeterminate') ? 'mixed' :
-            this.hasAttribute('checked') ? 'true' : 'false'
+            this.has('indeterminate') ? 'mixed' :
+            this.has('checked') ? 'true' : 'false'
         ));
 
         this.onSlotChange();
@@ -94,7 +92,7 @@ class CheckBox extends Component {
      * @returns {string} `'false'` (unchecked), `'true'` (checked), `'mixed'` (indeterminate).
      */
     get value() {
-        return this.$input.getAttribute('aria-checked');
+        return this.$input.get('aria-checked');
     }
 
     /**
@@ -103,17 +101,17 @@ class CheckBox extends Component {
      */
     set value(value) {
         if (value === -1 || value === 'mixed') {
-            this.removeAttribute('checked');
-            this.setAttribute('indeterminate', '');
-            this.$input.setAttribute('aria-checked', 'mixed');
+            this.remove('checked');
+            this.set('indeterminate', '');
+            this.$input.set('aria-checked', 'mixed');
         } else {
             value = util.bool(value);
-            this.removeAttribute('indeterminate');
-            this.toggleAttribute('checked', value);
-            this.$input.setAttribute('aria-checked', value);
+            this.remove('indeterminate');
+            this.toggle('checked', value);
+            this.$input.set('aria-checked', value);
             handleCheckBoxFor(this);
         }
     }
 }
 
-customElements.define(NAME, CheckBox);
+customElements.define('x-checkbox', CheckBox);

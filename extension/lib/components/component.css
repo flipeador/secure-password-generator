@@ -7,11 +7,8 @@
   color: inherit;
 }
 
-#container {
-  --clr-bgn: var(--clr-bgn-input, "transparent"); /* background color */
-  --clr-bgh: var(--clr-bgh-input, "transparent"); /* background color hover */
-  --clr-olf: var(--clr-olf-input, "transparent"); /* outline color focus */
-  --clr-bsn: var(--clr-bsn-input, "transparent"); /* box-shadow color */
+[hidden] {
+  display: none !important;
 }
 
 [disabled] {

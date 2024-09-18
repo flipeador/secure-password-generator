@@ -1,0 +1,7 @@
+svg {
+  display: block;
+  border-radius: 5px;
+  border: 12px solid var(--background, white);
+  aspect-ratio: 1;
+  shape-rendering: crispEdges;
+}

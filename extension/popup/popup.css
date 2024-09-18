@@ -1,12 +1,17 @@
-.background {
+:root {
+  /* https://developer.chrome.com/docs/css-ui/animate-to-height-auto */
+  interpolate-size: allow-keywords;
+}
+
+#background {
   position: fixed;
   inset: 0;
   opacity: .8;
   filter: blur(80px);
-  z-index: -999;
+  z-index: -1;
 }
 
-.background > div {
+#background > div {
   position: absolute;
   inset: 0;
   scale: .7;
@@ -28,185 +33,154 @@
 }
 
 html {
-  --clr-bg: #0B1221AA;
-  --clr-hl: #00ff7AAA;
+  --clr-text-dark: #1F1F1F;
+  --clr-text-light: #E1E1E1;
 
-  --clr-bgn-input: #FFFFFF0A;
-  --clr-bgh-input: #FFFFFF1A;
-  --clr-olf-input: #929292;
-  --clr-bsn-input: lightsteelblue;
+  --clr-highlight: #00FF7AAA;
+  --clr-background: #FFFFFF0A;
+  --clr-border: lightsteelblue;
+  --clr-focus: #929292;
+  --clr-hover: #FFFFFF1A;
 
-  color: #E1E1E1;
+  color: var(--clr-text-light);
   background: black;
 }
 
 html, body {
-  width: fit-content;
-  height: fit-content;
-}
-
-*, *::before, *::after {
-  box-sizing: border-box;
-  margin: 0px;
-  font-family: "IBM Plex Sans", "Trebuchet MS", sans-serif;
-  font-size: inherit;
-  color: inherit;
-  overflow-wrap: break-word;
-  hyphens: auto;
-}
-
-*:disabled {
-  opacity: .5;
-  pointer-events: none;
+  width: min-content;
+  height: min-content;
+  width: calc-size(min-content, size);
 }
 
 @starting-style {
   body {
+    width: 0;
     opacity: 0;
   }
 }
 
 body {
   background: transparent;
-  transition: opacity .5s;
+  transition: opacity .5s, width .2s;
 }
 
 span {
-  text-wrap: nowrap;
   align-content: center;
 }
 
-select:hover {
-  background: var(--clr-bgh-input);
+select {
+  outline: none;
+  border: none;
+  border-radius: 5px;
+  background: var(--clr-background);
+  box-shadow: 0 0 2px var(--clr-border);
+  transition-duration: .2s;
+  transition-timing-function: linear;
+  transition-property: color, background-color, box-shadow;
+
+  &:hover {
+    background: var(--clr-hover);
+  }
+
+  &:focus-visible {
+    outline: 1px dashed var(--clr-focus);
+  }
+
+  & > option {
+    color: initial;
+  }
 }
 
 x-input, select {
   width: 100%;
 }
 
-x-input, button, select {
+x-input, x-button, select {
   height: 2em;
 }
 
-button, select {
-  outline: none;
-  border-radius: 5px;
-  border: none;
-  background: var(--clr-bgn-input);
-  box-shadow: 0 0 2px lightsteelblue;
-  transition:
-    color .2s linear,
-    background-color .2s linear;
+x-tabview {
+  &::part(scrollable) {
+    /*
+     * The window size adapts to its content due to 'min-content'.
+     * But we want the tab list to not influence the window min-width.
+     * Use 'inline-size' so that the tab list size can be computed in isolation.
+     */
+    contain: inline-size;
+  }
 }
 
-button:focus-visible,
-select:focus-visible {
-  outline: 1px dashed var(--clr-olf-input);
-}
-
-select > option {
-  color: initial;
-}
-
-button:hover {
-  color: black;
-  background: var(--clr-hl);
-}
-
-.tab {
-  display: flex;
-  gap: 1em;
-  /*
-    The window size adapts to its content due to 'fit-content'.
-    But we want the tab buttons to not influence the window min-width.
-    We use 'inline-size' so that the tab size can be computed in isolation.
-  */
-  contain: inline-size;
-  /*
-    Use 'overflow' to make the tab buttons scrolleable horizontally.
-    The overflow is hidden so that the user does not see the scrollbar.
-    We translate vertical scroll to horizontal scroll with javascript.
-  */
-  overflow: hidden;
-  overscroll-behavior: contain;
-}
-
-.tab > button {
-  position: relative;
+x-tab {
   font-weight: bold;
-  text-wrap: nowrap;
-  padding: .5em 1em;
-  background: transparent;
-  box-shadow: none;
 }
 
-.tab > button:hover {
-  color: var(--clr-hl);
-}
-
-.tab > button[open] {
-  background: var(--clr-bg);
-  border-top-left-radius: 5px;
-  border-top-right-radius: 5px;
-}
-
-.tab > button[open]:after {
-  content: '';
-  position: absolute;
-  inset: auto auto 0 1em;
-  width: calc(100% - 2em);
-  height: 2px;
-  background: var(--clr-hl);
-  view-transition-name: open-tab;
-}
-
-.tab-content {
-  display: none;
-  gap: 1em;
-  align-items: center;
-}
-
-.tab-content[open] {
+x-tabpanel {
   display: grid;
-}
+  gap: 1em;
+  background: #0B1221AA;
 
-.tab-content[tab="1-1"] {
-  grid-template-columns: 1fr 23ch 10ch;
-}
+  &[name=password] {
+    grid-template-columns: auto 30ch 10ch;
 
-main {
-  position: relative;
-  padding: 1em;
-  background: var(--clr-bg);
-  z-index: 1;
-}
+    & > #exhaustive {
+      grid-column: 1 / 4;
+    }
 
-#exhaustive-randomized-transfer {
-  grid-column: 1 / 4;
-}
-
-#password {
-  grid-column: 1 / 4;
-}
-
-#qr-code {
-  --size: calc(256px + 12px);
-
-  position: relative;
-  margin-inline: auto;
-  width: var(--size);
-  height: var(--size);
-
-  & > canvas {
-    display: none;
+    & > #password {
+      grid-column: 1 / 4;
+    }
   }
 
-  & > img[src^=data] {
-    border: 6px solid white;
+  &[name=qrcode] {
+    & > #gravatar,
+    & > #qrcode::part(svg) {
+      width: 256px;
+      aspect-ratio: 1;
+    }
+
+    & > #gravatar {
+      position: relative;
+      border-radius: 50%;
+      border: 12px solid #FFFFFF10;
+      image-rendering: pixelated;
+    }
   }
 
-  & > img[src^=http] {
-    border: 6px solid #FFFFFF10;
-    border-radius: 50%;
+  &[name=about] {
+    & > h1 {
+      font-size: 2em;
+      background: linear-gradient(
+        0deg,
+        color(display-p3 0.28 1 0.61) 0%,
+        color(display-p3 0.22 0.8 0.68) 25%,
+        color(display-p3 0 0.78 0.81) 50%,
+        color(display-p3 0.22 0.69 0.9) 75%,
+        color(display-p3 0.5 0.75 1) 100%
+      );
+      background-clip: text;
+      color: transparent;
+      text-wrap: nowrap;
+      filter: drop-shadow(0 0 5px black);
+    }
+
+    & > div {
+      display: flex;
+      gap: 1em;
+
+      & > * {
+        flex: 1;
+      }
+    }
+
+    & > x-button[name=github] {
+      justify-content: start;
+      font-size: 1.5em;
+      padding-inline: 1em;
+      letter-spacing: .1em;
+
+      & > svg:last-of-type {
+        margin-left: auto;
+      }
+    }
   }
 }

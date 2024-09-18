@@ -1,7 +1,5 @@
 import * as util from '../../util.js';
-import { Component } from '../component.js';
-
-const NAME = 'x-input';
+import { ShadowComponent } from '../component.js';
 
 const STEP = 1;
 const MIN = Number.MIN_SAFE_INTEGER;
@@ -23,9 +21,9 @@ function removeDuplicates(str, unique) {
     return [...new Set(`${str}`)].join('');
 }
 
-class TextBox extends Component {
+class Input extends ShadowComponent {
     constructor() {
-        super(NAME);
+        super();
         this.loadCSS('input.css');
         this.loadHTML('input.html');
     }
@@ -51,17 +49,18 @@ class TextBox extends Component {
         this.$container.on('click', this.onContainerClick);
 
         this.$input.on('blur', this.onInputBlur);
+        this.$input.on('focus', this.onInputFocus);
         this.$input.on('wheel', this.onInputWheel);
         this.$input.on('change', this.onInputChange);
         this.$input.on('keydown', this.onInputKeyDown);
 
-        this.$eye.setFocusable(true, true);
+        this.$eye.setFocusable(0, [' ']);
         this.$eye.on('click', this.onEyeClick);
 
         this.$up.on('click', this.up);
         this.$down.on('click', this.down);
 
-        this.$copy.setFocusable(true, true);
+        this.$copy.setFocusable(0, [' ']);
         this.$copy.on('click', this.onCopyClick);
 
         for (const element of this.shadowRoot.querySelectorAll(CLICKABLE))
@@ -87,8 +86,14 @@ class TextBox extends Component {
     }
 
     onInputBlur() {
-        // Validate the current value when the input loses focus.
+        const icon = this.querySelector('[slot=icon]');
+        icon?.removeAttribute?.('focus');
         this.value = this.text;
+    }
+
+    onInputFocus() {
+        const icon = this.querySelector('[slot=icon]');
+        icon?.setAttribute?.('focus', '');
     }
 
     onInputWheel(event) {
@@ -117,8 +122,10 @@ class TextBox extends Component {
     }
 
     onEyeClick() {
-        this.$input.type = this.$input.type === 'password' ? 'text' : 'password';
-        this.$eye.setAttribute('aria-checked', `${this.$input.type === 'password'}`);
+        util.startViewTransition(() => {
+            this.$input.type = this.$input.type === 'password' ? 'text' : 'password';
+            this.$eye.set('aria-checked', `${this.$input.type === 'password'}`);
+        });
     }
 
     onCopyClick() {
@@ -153,71 +160,71 @@ class TextBox extends Component {
         this.$input.type = INPUT_TYPES.includes(value) ? value : 'text';
         this.$input.inputMode = INPUT_MODES.includes(value) ? value : 'text';
         if (this.$input.inputMode === 'text')
-            this.$input.removeAttribute('inputmode');
+            this.$input.remove('inputmode');
         const isNumber = value === 'numeric' || value === 'decimal';
-        this.$input.toggleAttribute('role', isNumber, 'spinbutton');
+        this.$input.toggle('role', isNumber, 'spinbutton');
         this.$input.classList.toggle('password', value === 'password');
-        this.$eye.setAttribute('aria-checked', `${value === 'password'}`);
+        this.$eye.set('aria-checked', `${value === 'password'}`);
     }
 
     get readonly() {
-        return this.$input.hasAttribute('readonly');
+        return this.$input.has('readonly');
     }
 
     set readonly(value) {
-        this.$input.toggleAttribute('readonly', !!value);
+        this.$input.toggle('readonly', !!value);
     }
 
     get placeholder() {
-        return this.$input.getAttribute('placeholder');
+        return this.$input.get('placeholder');
     }
 
     set placeholder(value) {
-        this.$input.setAttribute('placeholder', value);
+        this.$input.set('placeholder', value);
     }
 
     get spellcheck() {
-        return this.$input.getAttribute('spellcheck') === 'true';
+        return this.$input.get('spellcheck') === 'true';
     }
 
     set spellcheck(value) {
         value = util.bool(value);
-        this.$input.setAttribute('spellcheck', `${value}`);
+        this.$input.set('spellcheck', `${value}`);
     }
 
     get autocomplete() {
-        return this.$input.getAttribute('autocomplete');
+        return this.$input.get('autocomplete');
     }
 
     set autocomplete(value) {
-        this.$input.toggleAttribute('autocomplete', !!value, value);
+        this.$input.toggle('autocomplete', !!value, value);
     }
 
     get min() {
-        const value = this.$input.getAttribute('aria-valuemin');
+        const value = this.$input.get('aria-valuemin');
         return Number(value ?? MIN);
     }
 
     set min(value) {
-        this.$input.setAttribute('aria-valuemin', value);
+        this.$input.set('aria-valuemin', value);
     }
 
     get max() {
-        const value = this.$input.getAttribute('aria-valuemax');
+        const value = this.$input.get('aria-valuemax');
         return Number(value ?? MAX);
     }
 
     set max(value) {
-        this.$input.setAttribute('aria-valuemax', value);
+        this.$input.set('aria-valuemax', value);
     }
 
     get step() {
-        const value = this.$input.getAttribute('step');
+        const value = this.$input.get('step');
         return Number(value ?? STEP);
     }
 
     set step(value) {
-        this.$input.setAttribute('step', value);
+        this.$input.set('step', value);
     }
 
     get flags() {
@@ -250,4 +257,4 @@ class TextBox extends Component {
     }
 }
 
-customElements.define(NAME, TextBox);
+customElements.define('x-input', Input);
