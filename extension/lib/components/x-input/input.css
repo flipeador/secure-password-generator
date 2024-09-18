@@ -61,7 +61,7 @@ svg,
 
 #eye > svg:hover,
 #eye:focus-visible > svg {
-  color: var(--clr-highlight);
+  color: var(--clr-primary);
   scale: 1.2;
 }
 
@@ -85,7 +85,7 @@ svg,
 }
 
 #arrows > svg:hover {
-  color: var(--clr-highlight);
+  color: var(--clr-primary);
   scale: 1.5;
 }
 
@@ -101,7 +101,7 @@ svg,
 
 #copy > svg:hover,
 #copy:focus-visible > svg {
-  color: var(--clr-highlight);
+  color: var(--clr-primary);
   scale: 1.13;
   rotate: -5deg;
 }

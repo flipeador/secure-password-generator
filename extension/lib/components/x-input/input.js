@@ -22,14 +22,11 @@ function removeDuplicates(str, unique) {
 }
 
 class Input extends ShadowComponent {
-    constructor() {
-        super();
-        this.loadCSS('input.css');
-        this.loadHTML('input.html');
-    }
-
     async main() {
         await super.main();
+
+        await this.loadCSS('input.css');
+        await this.loadHTML('input.html');
 
         this.defineAttribute('type');
         this.defineAttribute('min');
@@ -44,24 +41,24 @@ class Input extends ShadowComponent {
         this.defineToggleAttribute('unique');
         this.defineToggleAttribute('readonly');
 
-        this.on('change', this.onChange);
+        this.on('change', 'onChange');
 
-        this.$container.on('click', this.onContainerClick);
+        this.$container.on('click', 'onContainerClick');
 
-        this.$input.on('blur', this.onInputBlur);
-        this.$input.on('focus', this.onInputFocus);
-        this.$input.on('wheel', this.onInputWheel);
-        this.$input.on('change', this.onInputChange);
-        this.$input.on('keydown', this.onInputKeyDown);
+        this.$input.on('blur', 'onInputBlur');
+        this.$input.on('focus', 'onInputFocus');
+        this.$input.on('wheel', 'onInputWheel');
+        this.$input.on('change', 'onInputChange');
+        this.$input.on('keydown', 'onInputKeyDown');
 
         this.$eye.setFocusable(0, [' ']);
-        this.$eye.on('click', this.onEyeClick);
+        this.$eye.on('click', 'onEyeClick');
 
-        this.$up.on('click', this.up);
-        this.$down.on('click', this.down);
+        this.$up.on('click', 'up');
+        this.$down.on('click', 'down');
 
         this.$copy.setFocusable(0, [' ']);
-        this.$copy.on('click', this.onCopyClick);
+        this.$copy.on('click', 'onCopyClick');
 
         for (const element of this.shadowRoot.querySelectorAll(CLICKABLE))
             element.on('click', event => event.stopPropagation());

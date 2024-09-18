@@ -17,12 +17,12 @@
   scale: .7;
   border-radius: 50%;
   background: conic-gradient(
-    #001979,
-    #003d7b,
-    #00C9FF,
-    #242f67,
-    #3724a1,
-    #00166b
+    color(display-p3 .0 .1 .6),
+    color(display-p3 .0 .25 .55),
+    color(display-p3 .0 .85 1),
+    color(display-p3 .09 .24 .62),
+    color(display-p3 .25 0 .82),
+    color(display-p3 .0 .09 .45)
   );
   animation: spin 10s linear infinite;
 }
@@ -36,7 +36,7 @@ html {
   --clr-text-dark: #1F1F1F;
   --clr-text-light: #E1E1E1;
 
-  --clr-highlight: #00FF7AAA;
+  --clr-primary: #00FF7AAA;
   --clr-background: #FFFFFF0A;
   --clr-border: lightsteelblue;
   --clr-focus: #929292;
@@ -68,34 +68,8 @@ span {
   align-content: center;
 }
 
-select {
-  outline: none;
-  border: none;
-  border-radius: 5px;
-  background: var(--clr-background);
-  box-shadow: 0 0 2px var(--clr-border);
-  transition-duration: .2s;
-  transition-timing-function: linear;
-  transition-property: color, background-color, box-shadow;
-
-  &:hover {
-    background: var(--clr-hover);
-  }
-
-  &:focus-visible {
-    outline: 1px dashed var(--clr-focus);
-  }
-
-  & > option {
-    color: initial;
-  }
-}
-
-x-input, select {
+x-input, x-select, x-button {
   width: 100%;
-}
-
-x-input, x-button, select {
   height: 2em;
 }
 
@@ -151,11 +125,11 @@ x-tabpanel {
       font-size: 2em;
       background: linear-gradient(
         0deg,
-        color(display-p3 0.28 1 0.61) 0%,
-        color(display-p3 0.22 0.8 0.68) 25%,
-        color(display-p3 0 0.78 0.81) 50%,
-        color(display-p3 0.22 0.69 0.9) 75%,
-        color(display-p3 0.5 0.75 1) 100%
+        color(display-p3 .28 1 .61) 0%,
+        color(display-p3 .22 .8 .68) 25%,
+        color(display-p3 0 .78 .81) 50%,
+        color(display-p3 .22 .69 .9) 75%,
+        color(display-p3 .5 .75 1) 100%
       );
       background-clip: text;
       color: transparent;

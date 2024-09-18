@@ -40,7 +40,7 @@ slot[name="intermediate"] {
 }
 
 #input:hover {
-  color: var(--clr-highlight);
+  color: var(--clr-primary);
   background: var(--clr-hover);
 }
 

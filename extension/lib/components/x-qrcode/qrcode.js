@@ -2,13 +2,12 @@ import * as QR from '../../qrcode.js';
 import { ShadowComponent } from '../component.js';
 
 class QRCode extends ShadowComponent {
-    constructor() {
-        super();
-        this.loadCSS('qrcode.css');
-        this.loadHTML('qrcode.html');
-    }
-
     async main() {
+        await super.main();
+
+        await this.loadCSS('qrcode.css');
+        await this.loadHTML('qrcode.html');
+
         this.defineAttribute('color');
         this.defineAttribute('background');
     }

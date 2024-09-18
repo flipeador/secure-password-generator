@@ -5,11 +5,12 @@ import { Component } from '../component.js';
  * @see https://developer.mozilla.org/docs/Web/Accessibility/ARIA/Roles/button_role
  */
 class Button extends Component {
-    constructor() {
-        super();
+    async main() {
+        await super.main();
+
         this.defineAttribute('href', null, true);
         this.setFocusable(0, [' ', 'Enter']);
-        this.on('click', this.onClick);
+        this.on('click', 'onClick');
     }
 
     onClick(event) {

@@ -8,16 +8,6 @@ export function clamp(value, min, max, step) {
     return value > max ? max : value < min ? min : value;
 }
 
-export function* range(start, end, step=1) {
-    if (end === undefined) {
-        end = start;
-        start = 0;
-    }
-
-    for (let i = start; i < end; i += step)
-        yield i;
-}
-
 export function shuffle(target) {
     for (let i = target.length - 1; i > 0; --i) {
         const j = random(0, i);

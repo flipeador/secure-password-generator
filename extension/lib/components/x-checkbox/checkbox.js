@@ -20,22 +20,18 @@ function handleCheckBoxFor(checkbox) {
  * @see https://developer.mozilla.org/docs/Web/Accessibility/ARIA/Roles/checkbox_role
  */
 class CheckBox extends ShadowComponent {
-    constructor() {
-        super();
-        this.type = 'checkbox';
-        this.loadCSS('checkbox.css');
-        this.loadHTML('checkbox.html');
-    }
-
     async main() {
         await super.main();
 
-        this.on('change', this.onChange);
+        await this.loadCSS('checkbox.css');
+        await this.loadHTML('checkbox.html');
+
+        this.on('change', 'onChange');
 
         this.$input.setFocusable(0, [' ']);
 
-        this.$label.on('click', this.onInputClick);
-        this.$input.on('click', this.onInputClick);
+        this.$label.on('click', 'onInputClick');
+        this.$input.on('click', 'onInputClick');
 
         this.value = (this.storage.value ?? (
             this.has('indeterminate') ? 'mixed' :
@@ -44,7 +40,7 @@ class CheckBox extends ShadowComponent {
 
         this.onSlotChange();
         for (const slot of this.shadowRoot.querySelectorAll('slot'))
-            slot.on('slotchange', this.onSlotChange);
+            slot.on('slotchange', 'onSlotChange');
     }
 
     onChange(event) {

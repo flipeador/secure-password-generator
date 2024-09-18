@@ -13,7 +13,7 @@ x-button {
   user-select: none;
 
   &:hover {
-    background: var(--clr-highlight);
+    background: var(--clr-primary);
   }
 
   &:active {

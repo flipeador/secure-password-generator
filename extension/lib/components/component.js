@@ -6,32 +6,31 @@ export class Component extends HTMLElement {
     static promises = [];
     promises = [];
 
+    constructor() {
+        super();
+
+        this.set('component');
+
+        const promise = this.pushPromise();
+        this.main().then(() => promise.resolve());
+    }
+
     static ready() {
         return Promise.all(Component.promises);
     }
 
     static save() {
         const elements = document.querySelectorAll('[local]');
-        for (const element of elements) element.save();
+        for (const element of elements)
+            if (element instanceof Component)
+                element.save();
     }
 
-    _pushPromise() {
+    pushPromise() {
         const promise = util.createPromise();
         Component.promises.push(promise);
         this.promises.push(promise);
         return promise;
-    }
-
-    _popPromise(promise) {
-        promise.resolve();
-        this.promises.splice(this.promises.indexOf(promise), 1);
-    }
-
-    async _loadStorage() {
-        let storage = await chrome.storage.session.get(this.id);
-        if (storage[this.id] === undefined)
-            storage = await chrome.storage.local.get(this.id);
-        this.storage = storage[this.id] ?? { };
     }
 
     ready() {
@@ -53,10 +52,16 @@ export class Component extends HTMLElement {
             this.storage?.[name] ??
             this.has(name);
         this.remove(name);
-        if (value) this[name] = true;
+        if (value)
+            this[name] = true;
     }
 
     async main() {
+        let storage = await chrome.storage.session.get(this.id);
+        if (storage[this.id] === undefined)
+            storage = await chrome.storage.local.get(this.id);
+        this.storage = storage[this.id] ?? { };
+
         this.defineToggleAttribute('disabled');
     }
 
@@ -111,13 +116,19 @@ export class Component extends HTMLElement {
     }
 
     /**
-     * Set a function that will be called whenever the specified event is delivered. \
-     * The listener function is bound to the element's shadow root host, or `this`.
+     * Set a function that will be called whenever the specified event is delivered.
      * @see https://developer.mozilla.org/docs/Web/API/EventTarget/addEventListener
      */
     on(event, listener, options) {
-        const root = this.getRootNode();
-        listener = listener.bind(root.host ?? this);
+        const host = (
+            this.getRootNode().host ??
+            this.closest('[component]')
+        );
+        listener = (
+            typeof(listener) === 'string' ?
+            host[listener].bind(host) :
+            listener.bind(host)
+        );
         this.addEventListener(event, listener, options);
         return listener;
     }
@@ -215,9 +226,13 @@ export class Component extends HTMLElement {
 export class ShadowComponent extends Component {
     constructor() {
         super();
-        this.loadCSS('../component.css');
         this.attachShadow({ mode: 'open' });
         this.shadowRoot.innerHTML = '<slot></slot>';
+    }
+
+    async main() {
+        await super.main();
+        await this.loadCSS('../component.css');
     }
 
     /**
@@ -232,21 +247,15 @@ export class ShadowComponent extends Component {
 
     /**
      * Set the HTML markup contained within the shadow root. \
-     * Parse all elements with an `id` and assign them to `this.$id`. \
-     * Store the element session or local storage in `this.storage`. \
-     * Call the async `main` method after the HTML markup is loaded.
+     * Parse all elements with an `id` and assign them to `this.$id`.
      * @see https://developer.mozilla.org/docs/Web/API/Element/innerHTML
      */
     async loadHTML(name) {
-        const promise = this._pushPromise();
         this.shadowRoot.innerHTML = await this.fetch(name);
         for (const element of this.shadowRoot.querySelectorAll('*')) {
             if (element.id) this[`$${element.id}`] = element;
             if (element instanceof Component) await element.ready();
         }
-        await this._loadStorage();
-        await this.main?.(name);
-        this._popPromise(promise);
     }
 }
 

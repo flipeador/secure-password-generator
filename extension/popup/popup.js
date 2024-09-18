@@ -31,11 +31,11 @@
 import * as util from '../lib/util.js';
 import { Component } from '../lib/components/component.js';
 
-// Wait for all web components to fully load.
-await Component.ready();
-
 const DIGITS = '0123456789';
 const LETTERS = 'abcdefghijklmnopqrstuvwxyz';
+
+// Wait for all web components to fully load.
+await Component.ready();
 
 // Make all elements with an ID globally available.
 for (const element of document.querySelectorAll('[id]'))
@@ -140,18 +140,18 @@ $use.on('click', async () => {
         password => {
             // Simulate a change on an input element.
             // https://stackoverflow.com/a/75701621/14822191
-            const setInputProp = (element, name, value) => {
+            const setInputValue = ($input, value) => {
                 const prop = Object.getOwnPropertyDescriptor(
                     window.HTMLInputElement.prototype,
-                    name
+                    'value'
                 );
-                prop.set.call(element, value); // call the setter
-                element.dispatchEvent(new Event('input', { bubbles: true }));
+                prop.set.call($input, value); // call the setter
+                $input.dispatchEvent(new Event('input', { bubbles: true }));
             };
             const inputUsername = document.querySelector('input[id=username]');
             const inputsPassword = document.querySelectorAll('input[type=password]');
             for (const inputPassword of inputsPassword)
-                setInputProp(inputPassword, 'value', password);
+                setInputValue(inputPassword, password);
             inputUsername?.focus?.();
         },
         $password.value
@@ -175,7 +175,9 @@ function generateQrCode(delay=0) {
                     setTimeout(() => $gravatar.src = url);
                     return new Promise((resolve, reject) => {
                         $gravatar.onerror = reject;
-                        $gravatar.onload = () => resolve(util.toggleDisplay($gravatar, $qrcode));
+                        $gravatar.onload = () => resolve(
+                            util.toggleDisplay($gravatar, $qrcode)
+                        );
                     });
                 });
 

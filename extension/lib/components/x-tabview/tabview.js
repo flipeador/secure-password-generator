@@ -17,19 +17,16 @@ class TabPanel extends ShadowComponent { }
  * @see https://developer.mozilla.org/docs/Web/Accessibility/ARIA/Roles/tablist_role
  */
 class TabView extends ShadowComponent {
-    constructor() {
-        super();
-        this.loadCSS('tabview.css');
-        this.loadHTML('tabview.html');
-    }
-
     async main() {
         await super.main();
 
-        this.$scrollable.on('wheel', this.onScrollableWheel);
+        await this.loadCSS('tabview.css');
+        await this.loadHTML('tabview.html');
 
-        this.$tabs.on('click', this.onTabsClick);
-        this.$tabs.on('keydown', this.onTabsKeyDown);
+        this.$scrollable.on('wheel', 'onScrollableWheel');
+
+        this.$tabs.on('click', 'onTabsClick');
+        this.$tabs.on('keydown', 'onTabsKeyDown');
 
         const xtabs = this.querySelectorAll('x-tab');
         const xpanels = this.querySelectorAll('x-tabpanel');

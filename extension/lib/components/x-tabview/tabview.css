@@ -37,11 +37,11 @@
     }
 
     &[aria-selected=true]::before {
-      background: var(--clr-highlight);
+      background: var(--clr-primary);
     }
 
     &:focus, &:hover {
-      color: var(--clr-highlight);
+      color: var(--clr-primary);
     }
   }
 

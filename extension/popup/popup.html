@@ -3,6 +3,7 @@
   <meta charset="UTF-8">
   <link rel="stylesheet" href="../lib/components/component.css">
   <link rel="stylesheet" href="../lib/components/x-link/link.css">
+  <link rel="stylesheet" href="../lib/components/x-select/select.css">
   <link rel="stylesheet" href="../lib/components/x-button/button.css">
   <link rel="stylesheet" href="popup.css">
   <body style="display: none;">
@@ -35,11 +36,11 @@
           local session>
           Letters (A-Z):
         </x-checkbox>
-        <select id="letterscase" value="3" session local>
+        <x-select id="letterscase" session local>
           <option value="upper">Uppercase</option>
           <option value="lower">Lowercase</option>
-          <option value="mixed" selected>MixedCase</option>
-        </select>
+          <option value="mixed" selected>Mixedcase</option>
+        </x-select>
         <x-input
           id="lettersmin"
           type="numeric"
@@ -261,6 +262,7 @@
     </svg>
     <!-- SCRIPTS -->
     <script type="module" src="../lib/components/x-link/link.js"></script>
+    <script type="module" src="../lib/components/x-select/select.js"></script>
     <script type="module" src="../lib/components/x-button/button.js"></script>
     <script type="module" src="../lib/components/x-input/input.js"></script>
     <script type="module" src="../lib/components/x-tabview/tabview.js"></script>
