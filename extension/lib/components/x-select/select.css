@@ -5,10 +5,10 @@ x-select {
    * https://developer.chrome.com/blog/rfc-customizable-select
    * https://github.com/openui/open-ui/blob/main/site/src/pages/components/customizableselect.mdx
    */
-  & > select,
+  /* & > select,
   & > select::picker(select) {
-    /* appearance: base-select; */
-  }
+    appearance: base-select;
+  } */
 
   & > select {
     width: 100%;
