@@ -134,7 +134,8 @@ x-tabpanel {
       background-clip: text;
       color: transparent;
       text-wrap: nowrap;
-      filter: drop-shadow(0 0 5px black);
+      user-select: none;
+      filter: drop-shadow(0 0 5px black) url(#text-glow);
     }
 
     & > div {

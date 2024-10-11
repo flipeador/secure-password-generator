@@ -17,7 +17,10 @@ Browser extension to generate secure random passwords and QR codes.
 
 ### Secure Random Password Generator
 
-Generate cryptographically secure random passwords with customizable options.
+Users can quickly generate cryptographically secure random passwords with customizable options when creating new accounts
+or updating existing passwords, ensuring better protection against hacking attempts.
+The password can be copied to the clipboard with a single click, or just press the `Use` button and let the extension
+automatically fill in the password field(s).
 
 Each time an option is modified, it is saved in the **session** storage. \
 Items in the session storage area are stored in-memory and will not be persisted to disk.
@@ -31,7 +34,9 @@ The UI and functionality is inspired by [`@mar-kolya\secure-password-generator`]
 
 ### QR Code Generator
 
-Generate a QR code given a `issuer`, `label` and `secret` value:
+Users can instantly create QR codes for text or authentication information given a `issuer`, `label` and `secret` value.
+
+Example: A user wants to enable 2FA with an authentication app on their smartphone. They can generate a custom QR code using the base32 encoded secret key displayed on the website. This is helpful when the default QR code provided doesn't meet the user's preferences, and the authentication app does not allow its modification.
 
 > otpauth://totp/ISSUER:LABEL?secret=SECRET&issuer=ISSUER
 

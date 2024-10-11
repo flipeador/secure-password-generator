@@ -1,7 +1,7 @@
 {
   "name": "@flipeador/secure-password-generator",
   "description": "Browser extension to generate secure random passwords.",
-  "version": "1.0.1",
+  "version": "1.0.3",
   "author": "Flipeador (https://github.com/flipeador)",
   "repository": "github:flipeador/secure-password-generator",
   "license": "Apache-2.0",
@@ -10,10 +10,10 @@
     "lint": "eslint ."
   },
   "devDependencies": {
-    "@stylistic/eslint-plugin": "^2.8.0",
-    "chrome-types": "^0.1.306",
-    "eslint": "^9.10.0",
-    "globals": "^15.9.0"
+    "@stylistic/eslint-plugin": "^2.9.0",
+    "chrome-types": "^0.1.308",
+    "eslint": "^9.12.0",
+    "globals": "^15.11.0"
   },
   "engines": {
     "pnpm": ">=9"

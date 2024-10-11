@@ -154,9 +154,10 @@
           id="qrcode"
           color="transparent"
           background="#FFFFFFC7"
-          aria-describedby="issuer label secret">
+          aria-describedby="issuer label secret"
+          style="display: none">
         </x-qrcode>
-        <img id="gravatar" aria-describedby="label">
+        <img id="gravatar" aria-describedby="label" style="display: none">
       </x-tabpanel>
       <!-- Tab Panel: About -->
       <x-tabpanel name="about">
@@ -201,7 +202,14 @@
         </x-button>
       </x-tabpanel>
     </x-tabview>
-    <!-- SVG -->
+    <!-- SVG Filters -->
+    <svg style="display: none">
+      <filter id="text-glow" x="-50%" y="-200%" width="200%" height="500%" primitiveUnits="objectBoundingBox">
+        <feGaussianBlur stdDeviation=".025 .2"></feGaussianBlur>
+        <feBlend in="SourceGraphic"></feBlend>
+      </filter>
+    </svg>
+    <!-- SVG Icons -->
     <svg style="display: none">
       <defs>
         <!-- Lock Keyhole -->
