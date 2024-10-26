@@ -4,13 +4,13 @@ Browser extension to generate secure random passwords and QR codes.
 
 <p align="center">
   <img alt="Preview" src="assets/preview.webp"/> <br/> <br/>
-  <a alt="Firefox Add-ons" href="https://addons.mozilla.org/addon/secure-password-generator-2">
+  <a href="https://addons.mozilla.org/addon/secure-password-generator-2">
     <img src="https://img.shields.io/badge/Firefox Add--ons-orange.svg?style=for-the-badge"/>
   </a>⠀
-    <a alt="Chrome Web Store" href="https://chrome.google.com/webstore/detail/kmekigbemdeoedipbfgjhmaodbgfhidc">
+  <a href="https://chrome.google.com/webstore/detail/kmekigbemdeoedipbfgjhmaodbgfhidc">
     <img src="https://img.shields.io/badge/Chrome Web Store-red.svg?style=for-the-badge"/>
   </a>⠀
-    <a alt="Donate via PayPal" href="https://www.paypal.com/donate/?hosted_button_id=DNFCXHF8NF32Y">
+  <a href="https://www.paypal.com/donate/?hosted_button_id=DNFCXHF8NF32Y">
     <img src="https://img.shields.io/badge/Donate-PayPal-blue.svg?style=for-the-badge"/>
   </a>
 </p>
@@ -49,6 +49,22 @@ Example: A user wants to enable 2FA with an authentication app on their smartpho
 3. If all fields are provided, generates a QR code using the [`otpauth://totp/` URI scheme][kuf], for your [2FA][2fa] [auth app][auth].
 
 The QR code input fields are never stored in the local storage.
+
+## Development
+
+The unpacked extension can be loaded directly from the source code.
+
+### Google Chrome
+
+1. Open the **Extensions** page by navigating to `chrome://extensions` in a new tab.
+2. Enable the **Developer Mode** by clicking the toggle switch next to `Developer mode`.
+3. Click the **Load unpacked** button and select the [`extension`](extension) directory.
+
+### Mozilla Firefox
+
+1. Open the **This Firefox** page by navigating to `about:debugging#/runtime/this-firefox`.
+2. Click the `Load Temporary Add-on` button, and select any file in the [`extension`](extension) directory.
+3. The extension now installs, and remains installed until you restart the browser.
 
 ## License
 

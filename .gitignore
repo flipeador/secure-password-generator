@@ -1,4 +1,5 @@
 ﻿/node_modules/
 /pnpm-lock.yaml
+
+/*.zip
 /test.js
-*.bak
