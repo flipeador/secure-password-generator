@@ -154,7 +154,7 @@ x-tabpanel {
     & > #gravatar,
     & > #qrcode::part(svg) {
       width: 256px;
-      height: 256px;
+      aspect-ratio: 1;
     }
 
     & > #gravatar {
