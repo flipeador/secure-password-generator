@@ -41,7 +41,7 @@ class TabView extends ShadowComponent {
         if ($element.parentElement !== this)
             this.appendChild($element);
         const $div = document.createElement('div');
-        $div.id = self.crypto.randomUUID();
+        $div.id = window.crypto.randomUUID();
         $div.innerHTML = `<slot name="${$div.id}"></slot>`;
         $div.role = role; $element.slot = $div.id;
         return $div;
@@ -119,8 +119,7 @@ class TabView extends ShadowComponent {
                 )
             `);
 
-        if (!(value instanceof Tab)
-        || value.parentElement !== this)
+        if (!(value instanceof Tab) || value.parentElement !== this)
             throw new Error('Invalid tab');
 
         for (const $xtab of this.querySelectorAll('x-tab')) {

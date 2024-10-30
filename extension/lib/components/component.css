@@ -1,6 +1,6 @@
 *, *::before, *::after {
   box-sizing: border-box;
-  margin: 0px;
+  margin: 0;
   border: none;
   outline: none;
   font: inherit;
@@ -11,6 +11,6 @@
   display: none !important;
 }
 
-[disabled] {
+[disabled][inert] {
   opacity: .5 !important;
 }

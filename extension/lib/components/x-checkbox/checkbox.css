@@ -1,5 +1,6 @@
 #container {
   display: flex;
+  height: 100%;
   gap: .5em;
   align-items: center;
   cursor: default;
