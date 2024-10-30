@@ -23,8 +23,7 @@
 }
 
 #input {
-  flex: 1;
-  min-width: 2ch;
+  width: 100%;
   background: transparent;
 }
 

@@ -15,6 +15,13 @@ Browser extension to generate secure random passwords and QR codes.
   </a>
 </p>
 
+Libraries without dependencies included in the project:
+
+| File | Author | Description |
+| --- | --- | --- |
+| [`otp2fa.js`](extension/lib/otp2fa.js) | @flipeador | One-time password implementation. |
+| [`qrcode.js`](extension/lib/qrcode.js) | @davidshimjs | QR code generator for the browser. |
+
 ### Secure Random Password Generator
 
 Users can quickly generate cryptographically secure random passwords with customizable options when creating new accounts
@@ -36,7 +43,7 @@ The UI and functionality is inspired by [`@mar-kolya\secure-password-generator`]
 
 Users can instantly create QR codes for text or authentication information given a `issuer`, `label` and `secret` value.
 
-Example: A user wants to enable 2FA with an authentication app on their smartphone. They can generate a custom QR code using the base32 encoded secret key displayed on the website. This is helpful when the default QR code provided doesn't meet the user's preferences, and the authentication app does not allow its modification.
+Example: A user wants to enable 2FA with an authentication app on their smartphone. They can generate a custom QR code using the [base32][b32] encoded secret key displayed on the website. This is helpful when the default QR code provided doesn't meet the user's preferences, and the authentication app does not allow its modification.
 
 > otpauth://totp/ISSUER:LABEL?secret=SECRET&issuer=ISSUER
 
@@ -47,6 +54,7 @@ Example: A user wants to enable 2FA with an authentication app on their smartpho
 1. If the `issuer` or `label` fields are empty, generates a QR code just for the text in the `secret` input field.
 2. If `label` is an email and `secret` is empty, gets the [Gravatar profile image][gravatar] for the email address using sha256.
 3. If all fields are provided, generates a QR code using the [`otpauth://totp/` URI scheme][kuf], for your [2FA][2fa] [auth app][auth].
+4. If the `secret` field is a valid [base32][b32] string, generates a [TOTP][totp] 6-digit passcode for the current time ([SHA-1][sha1], 30s).
 
 The QR code input fields are never stored in the local storage.
 
@@ -74,6 +82,10 @@ See the [license file](LICENSE) for details.
 <!-- Reference Links -->
 [spg]: https://github.com/mar-kolya/secure-password-generator
 [kuf]: https://github.com/google/google-authenticator/wiki/Key-Uri-Format
-[2fa]: https://en.wikipedia.org/wiki/Multi-factor_authentication
-[auth]: https://en.wikipedia.org/wiki/Authenticator
 [gravatar]: https://docs.gravatar.com/api/avatars/images
+
+[2fa]: https://en.wikipedia.org/wiki/Multi-factor_authentication
+[totp]: https://en.wikipedia.org/wiki/Time-based_one-time_password
+[auth]: https://en.wikipedia.org/wiki/Authenticator
+[sha1]: https://en.wikipedia.org/wiki/SHA-1
+[b32]: https://en.wikipedia.org/wiki/Base32

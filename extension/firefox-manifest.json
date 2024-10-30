@@ -1,7 +1,7 @@
 {
   "name": "Secure Password Generator",
   "description": "Generate secure random passwords and QR codes.",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "author": "flipeador@gmail.com",
   "homepage_url": "https://github.com/flipeador/secure-password-generator",
   "manifest_version": 3,

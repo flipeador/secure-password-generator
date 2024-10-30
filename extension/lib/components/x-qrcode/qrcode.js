@@ -8,33 +8,29 @@ class QRCode extends ShadowComponent {
         await this.loadCSS('qrcode.css');
         await this.loadHTML('qrcode.html');
 
-        this.defineAttribute('color');
-        this.defineAttribute('background');
+        this.color = this.remove('color') || 'black';
+        this.background = this.remove('background') || 'white';
+        this.$svg.style.setProperty('--background', this.background);
     }
 
-    get color() {
-        return this.$container.getAttribute('color');
+    download() {
+        const canvas = document.createElement('canvas');
+        QR.draw(canvas, this.value, { border: 'white' });
+
+        const a = document.createElement('a');
+        a.href = canvas.toDataURL(); // PNG
+        a.download = 'qr-code.png';
+        a.click();
     }
 
-    set color(value) {
-        this.$container.setAttribute('color', value);
-    }
-
-    get background() {
-        return this.$container.getAttribute('background');
-    }
-
-    set background(value) {
-        this.$container.setAttribute('background', value);
-        this.$svg.style.setProperty('--background', value);
+    get value() {
+        return this.$container.get('title');
     }
 
     set value(value) {
-        const size = QR.draw(this.$svg, value, {
-            color: this.color,
-            background: this.background,
-        });
-        this.$svg.set('width', 12 * size);
+        const options = { color: this.color, background: this.background };
+        const size = QR.draw(this.$svg, value, options) * QR.CELL_SIZE_PX;
+        this.$svg.set('width', size);
         this.$container.set('title', value || null);
     }
 }

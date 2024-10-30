@@ -7,8 +7,10 @@ const MAX = Number.MAX_SAFE_INTEGER;
 
 const CLICKABLE = ':is([role=button],[role=checkbox])';
 
-const INPUT_TYPES = ['color', 'date', 'datetime-local', 'email', 'number',
-    , 'file', 'month', 'password', 'search', 'tel', 'time', 'url', 'week'];
+const INPUT_TYPES = [
+    'color', 'date', 'datetime-local', 'email', 'number',
+    'file', 'month', 'password', 'search', 'tel', 'time', 'url', 'week'
+];
 const INPUT_MODES = ['none', 'decimal', 'numeric', 'tel', 'search', 'email', 'url'];
 
 function clamp(value, min, max, step) {
@@ -83,13 +85,11 @@ class Input extends ShadowComponent {
     }
 
     onInputBlur() {
-        const icon = this.querySelector('[slot=icon]');
-        icon?.removeAttribute?.('focus');
+        this.querySelector('[slot=icon]')?.remove?.('focus');
     }
 
     onInputFocus() {
-        const icon = this.querySelector('[slot=icon]');
-        icon?.setAttribute?.('focus', '');
+        this.querySelector('[slot=icon]')?.set?.('focus');
     }
 
     onInputWheel(event) {

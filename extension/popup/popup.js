@@ -18,6 +18,9 @@
         $label
         $secret
         $qrcode
+        $otpcode
+        $otpsec
+        $downloadqrcode
         $gravatar
         $clearlocal
         $clearsession
@@ -29,6 +32,7 @@
 */
 
 import * as util from '../lib/util.js';
+import { padotp, totp, otpauthURL } from '../lib/otp2fa.js';
 import { Component } from '../lib/components/component.js';
 
 const DIGITS = '0123456789';
@@ -52,6 +56,8 @@ $tabview.on('load', () => {
 [$issuer, $label, $secret].forEach(input => {
     input.on('input', () => generateQrCode(500));
 });
+
+$downloadqrcode.on('click', () => $qrcode.download());
 
 $clearlocal.on('click', () => {
     chrome.storage.local.clear();
@@ -162,16 +168,16 @@ $use.on('click', async () => {
 
 /**
  * Generate the QR code or Gravatar image.
- * @see https://github.com/flipeador/node-otp-2fa
- * @see https://github.com/google/google-authenticator/wiki/Key-Uri-Format
  */
 function generateQrCode(delay=0) {
-    clearTimeout(generateQrCode.timer);
+    clearTimeout(generateQrCode.qrTimer);
+    clearTimeout(generateQrCode.otpTimer);
 
-    generateQrCode.timer = setTimeout(
+    generateQrCode.qrTimer = setTimeout(
         () => util.startViewTransition(() => {
             if (!$secret.value && /.+@.+\..+/.test($label.value))
-                return util.getGravatarUrl($label.value).then(url => {
+                return util.getGravatarUrl($label.value, 256 - 12)
+                .then(url => {
                     setTimeout(() => $gravatar.src = url);
                     return new Promise((resolve, reject) => {
                         $gravatar.onerror = reject;
@@ -182,20 +188,32 @@ function generateQrCode(delay=0) {
                 });
 
             util.toggleDisplay($qrcode, $gravatar);
-            $qrcode.value = getAuthUrl($issuer.value, $label.value, $secret.value);
+
+            $qrcode.value = (
+                $issuer.value && $label.value && $secret.value ?
+                otpauthURL($issuer.value, $label.value, $secret.value) :
+                $secret.value
+            );
+
+            $otpsec.style.setProperty('--angle', '360deg');
+            $otpcode.value = '000000'; $otpsec.textContent = '30';
+            generateQrCode.otpTimer = setInterval(() => updateTOTP(), 1000);
+            return updateTOTP();
         }),
         delay
     );
 }
 
-function getAuthUrl(issuer, label, secret) {
-    const iss = encodeURIComponent(issuer);
-    const lab = encodeURIComponent(label);
-    const sec = encodeURIComponent(secret);
-    return (
-        issuer === '' || label === '' ? secret : !secret ? '' :
-        `otpauth://totp/${iss}:${lab}?secret=${sec}&issuer=${iss}`
-    );
+async function updateTOTP(period=30) {
+    if ($secret.value.length < 5 || $tabview.active.name !== 'qrcode')
+        return;
+    try {
+        const time = Math.floor(Date.now() / 1000);
+        const seconds = period - time % period;
+        $otpcode.value = padotp(await totp($secret.value, time), 6);
+        $otpsec.textContent = `${seconds}`.padStart(2, '0');
+        $otpsec.style.setProperty('--angle', `${(seconds / 30) * 360}deg`);
+    } catch { /* EMPTY */ }
 }
 
 /**
