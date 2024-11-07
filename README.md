@@ -4,16 +4,31 @@ Browser extension to generate secure random passwords and QR codes.
 
 <p align="center">
   <img alt="Preview" src="assets/preview.webp"/> <br/> <br/>
-  <a href="https://addons.mozilla.org/addon/secure-password-generator-2">
-    <img src="https://img.shields.io/badge/Firefox Add--ons-orange.svg?style=for-the-badge"/>
-  </a>⠀
   <a href="https://chrome.google.com/webstore/detail/kmekigbemdeoedipbfgjhmaodbgfhidc">
-    <img src="https://img.shields.io/badge/Chrome Web Store-red.svg?style=for-the-badge"/>
+    <img
+      alt="Google Chrome"
+      src="https://img.shields.io/badge/Google_Chrome-E23A2D.svg?style=for-the-badge&logo=googlechrome&logoColor=white"/>
+  </a>⠀
+  <a href="https://addons.mozilla.org/addon/secure-password-generator-2">
+    <img
+      alt="Mozilla Firefox"
+      src="https://img.shields.io/badge/Mozilla_Firefox-FF7139.svg?style=for-the-badge&logo=firefoxbrowser&logoColor=white"/>
+  </a>⠀
+  <a href="https://microsoftedge.microsoft.com/addons/detail/einmhmdbioiaimgljjibpfmfldoclnhg">
+    <img
+      alt="Microsoft Edge"
+      src="https://img.shields.io/badge/Microsoft_Edge-0A85D9.svg?style=for-the-badge"/>
   </a>⠀
   <a href="https://www.paypal.com/donate/?hosted_button_id=DNFCXHF8NF32Y">
-    <img src="https://img.shields.io/badge/Donate-PayPal-blue.svg?style=for-the-badge"/>
+    <img
+      alt="PayPal Donate"
+      src="https://img.shields.io/badge/PayPal-Donate-gray.svg?style=for-the-badge&logo=paypal&logoColor=white&labelColor=003087"/>
   </a>
 </p>
+
+> [!NOTE]
+> SMS verification is one of the weakest methods for two-factor authentication. [^1] \
+> If possible, use a [📱software-based authenticator][auth] and disable other [2FA][2fa] alternatives.
 
 Libraries without dependencies included in the project:
 
@@ -79,9 +94,13 @@ The unpacked extension can be loaded directly from the source code.
 This project is licensed under the **GNU General Public License v3.0**.
 See the [license file](LICENSE) for details.
 
+<!-- Footnotes -->
+[^1]: <https://www.howtogeek.com/310418/why-you-shouldnt-use-sms-for-two-factor-authentication>
+
 <!-- Reference Links -->
 [spg]: https://github.com/mar-kolya/secure-password-generator
 [kuf]: https://github.com/google/google-authenticator/wiki/Key-Uri-Format
+
 [gravatar]: https://docs.gravatar.com/api/avatars/images
 
 [2fa]: https://en.wikipedia.org/wiki/Multi-factor_authentication
