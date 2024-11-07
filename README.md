@@ -27,17 +27,25 @@ Browser extension to generate secure random passwords and QR codes.
 </p>
 
 > [!NOTE]
-> SMS verification is one of the weakest methods for two-factor authentication. [^1] \
-> If possible, use a [📱software-based authenticator][auth] and disable other [2FA][2fa] alternatives.
+> SMS verification is one of the weakest methods for two-factor authentication ([2FA][2fa]). [^1] \
+> If possible, use a [📱software-based authenticator][auth][^2] and disable other [2FA][2fa] alternatives.
 
-Libraries without dependencies included in the project:
+#### I'm kinda paranoid and I don't trust this extension? 🤔
+
+Visit [CRX Viewer][crxviewer], and paste the extension's URL to view the source code from the web store.
+
+The source code is fully readable, it is not minified nor obfuscated, so that you can easily inspect it.
+
+If you are concerned about automatic updates, [load the extension directly from the source code](#development).
+
+#### Libraries without dependencies included in the project:
 
 | File | Author | Description |
 | --- | --- | --- |
 | [`otp2fa.js`](extension/lib/otp2fa.js) | @flipeador | One-time password implementation. |
 | [`qrcode.js`](extension/lib/qrcode.js) | @davidshimjs | QR code generator for the browser. |
 
-### Secure Random Password Generator
+## Secure Random Password Generator
 
 Users can quickly generate cryptographically secure random passwords with customizable options when creating new accounts
 or updating existing passwords, ensuring better protection against hacking attempts.
@@ -54,7 +62,7 @@ The `password` input field is never stored in the local storage.
 
 The UI and functionality is inspired by [`@mar-kolya\secure-password-generator`][spg].
 
-### QR Code Generator
+## QR Code Generator
 
 Users can instantly create QR codes for text or authentication information given a `issuer`, `label` and `secret` value.
 
@@ -95,12 +103,14 @@ This project is licensed under the **GNU General Public License v3.0**.
 See the [license file](LICENSE) for details.
 
 <!-- Footnotes -->
-[^1]: <https://www.howtogeek.com/310418/why-you-shouldnt-use-sms-for-two-factor-authentication>
+[^1]: <https://howtogeek.com/310418/why-you-shouldnt-use-sms-for-two-factor-authentication>
+[^2]: <https://microsoft.com/en/security/mobile-authenticator-app>
 
 <!-- Reference Links -->
 [spg]: https://github.com/mar-kolya/secure-password-generator
 [kuf]: https://github.com/google/google-authenticator/wiki/Key-Uri-Format
 
+[crxviewer]: https://crxviewer.com
 [gravatar]: https://docs.gravatar.com/api/avatars/images
 
 [2fa]: https://en.wikipedia.org/wiki/Multi-factor_authentication
