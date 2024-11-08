@@ -42,7 +42,7 @@ html {
   --clr-focus: #929292;
   --clr-hover: #FFFFFF1A;
 
-  font-size: 1rem;
+  font-size: max(12px, 1rem * 75 / 100);
   color: var(--clr-text-light);
   background: black;
 }
@@ -61,6 +61,12 @@ html, body {
 }
 
 body {
+  /*
+    Chrome injects a stylesheet in popup ui which reduces the font size to 75%.
+    Set the font size to `inherit`, so that it is consistent across all browsers.
+    https://stackoverflow.com/q/71480433/14822191
+  */
+  font-size: inherit;
   background: transparent;
   transition: opacity .5s, width .2s;
 }
