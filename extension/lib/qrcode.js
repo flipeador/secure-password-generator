@@ -15,7 +15,7 @@
  *
  *
  * Modified by @flipeador.
- * https://github.com/flipeador/secure-password-generator
+ * https://gist.github.com/flipeador/de0cc6513f2aaa05def7456d99360369
  *
  * - Convert to ES6 module.
  * - Minify most of the code.

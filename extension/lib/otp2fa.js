@@ -1,8 +1,6 @@
 /**
- * One-time password implementation by @flipeador.
- * https://github.com/flipeador/secure-password-generator
- *
- * Works in the browser and in NodeJS.
+ * One-time password implementation for NodeJS and the browser.
+ * https://gist.github.com/flipeador/d70a8a08b9600116cc102b6f63e8519e
  *
  * Special thanks to ChatGPT for its incredible skills.
  */
