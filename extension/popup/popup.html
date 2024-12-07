@@ -119,7 +119,7 @@
           title="The generated password"
           flags="copy" readonly session>
           <svg slot="icon">
-            <use xlink:href="#sym-lock-keyhole"></use>
+            <use href="#icon:lock-keyhole"></use>
           </svg>
         </x-input>
         <!-- Buttons -->
@@ -140,7 +140,7 @@
           title="Account provider or service"
           session>
           <svg slot="icon">
-            <use xlink:href="#sym-building"></use>
+            <use href="#icon:building"></use>
           </svg>
         </x-input>
         <x-input
@@ -149,7 +149,7 @@
           title="Account name or email"
           session>
           <svg slot="icon">
-            <use xlink:href="#sym-mail"></use>
+            <use href="#icon:mail"></use>
           </svg>
         </x-input>
         <x-input
@@ -158,7 +158,7 @@
           title="Arbitrary key value encoded in Base32"
           session>
           <svg slot="icon">
-            <use xlink:href="#sym-key-round"></use>
+            <use href="#icon:key-round"></use>
           </svg>
         </x-input>
         <!-- TOTP / Download QR Code -->
@@ -175,7 +175,7 @@
             id="downloadqrcode"
             title="Download QR Code">
             <svg style="height: 80%; aspect-ratio: 1;" aria-hidden="true">
-              <use xlink:href="#sym-download"></use>
+              <use href="#icon:download"></use>
             </svg>
           </x-button>
         </div>
@@ -206,7 +206,7 @@
             id="import"
             title="Import cloud storage to local storage">
             <svg style="height: 80%; aspect-ratio: 1;" aria-hidden="true">
-              <use xlink:href="#sym-cloud-download"></use>
+              <use href="#icon:cloud-download"></use>
             </svg>
             Import
           </x-button>
@@ -214,7 +214,7 @@
             id="export"
             title="Export local storage to cloud storage">
             <svg style="height: 80%; aspect-ratio: 1;" aria-hidden="true">
-              <use xlink:href="#sym-cloud-upload"></use>
+              <use href="#icon:cloud-upload"></use>
             </svg>
             Export
           </x-button>
@@ -223,11 +223,11 @@
           name="github"
           href="https://github.com/flipeador/secure-password-generator">
           <svg style="height: 80%; aspect-ratio: 1;" aria-hidden="true">
-            <use xlink:href="#sym-github"></use>
+            <use href="#icon:github"></use>
           </svg>
           GitHub
           <svg style="height: 80%; aspect-ratio: 1;" aria-hidden="true">
-            <use xlink:href="#sym-external-link"></use>
+            <use href="#icon:external-link"></use>
           </svg>
         </x-button>
       </x-tabpanel>
@@ -241,70 +241,68 @@
     </svg>
     <!-- SVG Icons -->
     <svg style="display: none">
-      <defs>
-        <!-- Lock Keyhole -->
-        <!-- https://lucide.dev/icons/lock-keyhole -->
-        <symbol id="sym-lock-keyhole" viewBox="0 0 24 24" fill="none" stroke="gold" stroke-width="2">
-          <circle cx="12" cy="16" r="1"/>
-          <rect x="3" y="10" width="18" height="12" rx="2"/>
-          <path d="M7 10V7a5 5 0 0 1 10 0v3"/>
-        </symbol>
-        <!-- Key Round -->
-        <!-- https://lucide.dev/icons/key-round -->
-        <symbol id="sym-key-round" viewBox="0 0 24 24" fill="none" stroke="gold" stroke-width="2">
-          <path d="M2.586 17.414A2 2 0 0 0 2 18.828V21a1 1 0 0 0 1 1h3a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h1a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h.172a2 2 0 0 0 1.414-.586l.814-.814a6.5 6.5 0 1 0-4-4z"/>
-          <circle cx="16.5" cy="7.5" r=".5" fill="currentColor"/>
-        </symbol>
-        <!-- Mail -->
-        <!-- https://lucide.dev/icons/mail -->
-        <symbol id="sym-mail" viewBox="0 0 24 24" fill="none" stroke="cornflowerblue" stroke-width="2">
-          <rect width="20" height="16" x="2" y="4" rx="2"/>
-          <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
-        </symbol>
-        <!-- Building 2 -->
-        <!-- https://lucide.dev/icons/building-2 -->
-        <symbol id="sym-building" viewBox="0 0 24 24" fill="none" stroke="coral" stroke-width="2">
-          <path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/>
-          <path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/>
-          <path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"/>
-          <path d="M10 6h4"/>
-          <path d="M10 10h4"/>
-          <path d="M10 14h4"/>
-          <path d="M10 18h4"/>
-        </symbol>
-        <!-- GitHub -->
-        <symbol id="sym-github" viewBox="0 0 256 250" fill="currentColor">
-          <path d="M128.001 0C57.317 0 0 57.307 0 128.001c0 56.554 36.676 104.535 87.535 121.46 6.397 1.185 8.746-2.777 8.746-6.158 0-3.052-.12-13.135-.174-23.83-35.61 7.742-43.124-15.103-43.124-15.103-5.823-14.795-14.213-18.73-14.213-18.73-11.613-7.944.876-7.78.876-7.78 12.853.902 19.621 13.19 19.621 13.19 11.417 19.568 29.945 13.911 37.249 10.64 1.149-8.272 4.466-13.92 8.127-17.116-28.431-3.236-58.318-14.212-58.318-63.258 0-13.975 5-25.394 13.188-34.358-1.329-3.224-5.71-16.242 1.24-33.874 0 0 10.749-3.44 35.21 13.121 10.21-2.836 21.16-4.258 32.038-4.307 10.878.049 21.837 1.47 32.066 4.307 24.431-16.56 35.165-13.12 35.165-13.12 6.967 17.63 2.584 30.65 1.255 33.873 8.207 8.964 13.173 20.383 13.173 34.358 0 49.163-29.944 59.988-58.447 63.157 4.591 3.972 8.682 11.762 8.682 23.704 0 17.126-.148 30.91-.148 35.126 0 3.407 2.304 7.398 8.792 6.14C219.37 232.5 256 184.537 256 128.002 256 57.307 198.691 0 128.001 0Zm-80.06 182.34c-.282.636-1.283.827-2.194.39-.929-.417-1.45-1.284-1.15-1.922.276-.655 1.279-.838 2.205-.399.93.418 1.46 1.293 1.139 1.931Zm6.296 5.618c-.61.566-1.804.303-2.614-.591-.837-.892-.994-2.086-.375-2.66.63-.566 1.787-.301 2.626.591.838.903 1 2.088.363 2.66Zm4.32 7.188c-.785.545-2.067.034-2.86-1.104-.784-1.138-.784-2.503.017-3.05.795-.547 2.058-.055 2.861 1.075.782 1.157.782 2.522-.019 3.08Zm7.304 8.325c-.701.774-2.196.566-3.29-.49-1.119-1.032-1.43-2.496-.726-3.27.71-.776 2.213-.558 3.315.49 1.11 1.03 1.45 2.505.701 3.27Zm9.442 2.81c-.31 1.003-1.75 1.459-3.199 1.033-1.448-.439-2.395-1.613-2.103-2.626.301-1.01 1.747-1.484 3.207-1.028 1.446.436 2.396 1.602 2.095 2.622Zm10.744 1.193c.036 1.055-1.193 1.93-2.715 1.95-1.53.034-2.769-.82-2.786-1.86 0-1.065 1.202-1.932 2.733-1.958 1.522-.03 2.768.818 2.768 1.868Zm10.555-.405c.182 1.03-.875 2.088-2.387 2.37-1.485.271-2.861-.365-3.05-1.386-.184-1.056.893-2.114 2.376-2.387 1.514-.263 2.868.356 3.061 1.403Z"/>
-        </symbol>
-        <!-- Download -->
-        <!-- https://lucide.dev/icons/download -->
-        <symbol id="sym-download" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-          <polyline points="7 10 12 15 17 10"/>
-          <line x1="12" x2="12" y1="15" y2="3"/>
-        </symbol>
-        <!-- External Link -->
-        <!-- https://lucide.dev/icons/external-link -->
-        <symbol id="sym-external-link" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M15 3h6v6"/>
-          <path d="M10 14 21 3"/>
-          <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
-        </symbol>
-        <!-- Cloud Download -->
-        <!-- https://lucide.dev/icons/cloud-download -->
-        <symbol id="sym-cloud-download" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M12 13v8l-4-4"/>
-          <path d="m12 21 4-4"/>
-          <path d="M4.393 15.269A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.436 8.284"/>
-        </symbol>
-        <!-- Cloud Upload -->
-        <!-- https://lucide.dev/icons/cloud-upload -->
-        <symbol id="sym-cloud-upload" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M12 13v8"/>
-          <path d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242"/>
-          <path d="m8 17 4-4 4 4"/>
-        </symbol>
-      </defs>
+      <!-- Lock Keyhole -->
+      <!-- https://lucide.dev/icons/lock-keyhole -->
+      <symbol id="icon:lock-keyhole" viewBox="0 0 24 24" fill="none" stroke="gold" stroke-width="2">
+        <circle cx="12" cy="16" r="1"/>
+        <rect x="3" y="10" width="18" height="12" rx="2"/>
+        <path d="M7 10V7a5 5 0 0 1 10 0v3"/>
+      </symbol>
+      <!-- Key Round -->
+      <!-- https://lucide.dev/icons/key-round -->
+      <symbol id="icon:key-round" viewBox="0 0 24 24" fill="none" stroke="gold" stroke-width="2">
+        <path d="M2.586 17.414A2 2 0 0 0 2 18.828V21a1 1 0 0 0 1 1h3a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h1a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h.172a2 2 0 0 0 1.414-.586l.814-.814a6.5 6.5 0 1 0-4-4z"/>
+        <circle cx="16.5" cy="7.5" r=".5" fill="currentColor"/>
+      </symbol>
+      <!-- Mail -->
+      <!-- https://lucide.dev/icons/mail -->
+      <symbol id="icon:mail" viewBox="0 0 24 24" fill="none" stroke="cornflowerblue" stroke-width="2">
+        <rect width="20" height="16" x="2" y="4" rx="2"/>
+        <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
+      </symbol>
+      <!-- Building 2 -->
+      <!-- https://lucide.dev/icons/building-2 -->
+      <symbol id="icon:building" viewBox="0 0 24 24" fill="none" stroke="coral" stroke-width="2">
+        <path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/>
+        <path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/>
+        <path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"/>
+        <path d="M10 6h4"/>
+        <path d="M10 10h4"/>
+        <path d="M10 14h4"/>
+        <path d="M10 18h4"/>
+      </symbol>
+      <!-- GitHub -->
+      <symbol id="icon:github" viewBox="0 0 256 250" fill="currentColor">
+        <path d="M128.001 0C57.317 0 0 57.307 0 128.001c0 56.554 36.676 104.535 87.535 121.46 6.397 1.185 8.746-2.777 8.746-6.158 0-3.052-.12-13.135-.174-23.83-35.61 7.742-43.124-15.103-43.124-15.103-5.823-14.795-14.213-18.73-14.213-18.73-11.613-7.944.876-7.78.876-7.78 12.853.902 19.621 13.19 19.621 13.19 11.417 19.568 29.945 13.911 37.249 10.64 1.149-8.272 4.466-13.92 8.127-17.116-28.431-3.236-58.318-14.212-58.318-63.258 0-13.975 5-25.394 13.188-34.358-1.329-3.224-5.71-16.242 1.24-33.874 0 0 10.749-3.44 35.21 13.121 10.21-2.836 21.16-4.258 32.038-4.307 10.878.049 21.837 1.47 32.066 4.307 24.431-16.56 35.165-13.12 35.165-13.12 6.967 17.63 2.584 30.65 1.255 33.873 8.207 8.964 13.173 20.383 13.173 34.358 0 49.163-29.944 59.988-58.447 63.157 4.591 3.972 8.682 11.762 8.682 23.704 0 17.126-.148 30.91-.148 35.126 0 3.407 2.304 7.398 8.792 6.14C219.37 232.5 256 184.537 256 128.002 256 57.307 198.691 0 128.001 0Zm-80.06 182.34c-.282.636-1.283.827-2.194.39-.929-.417-1.45-1.284-1.15-1.922.276-.655 1.279-.838 2.205-.399.93.418 1.46 1.293 1.139 1.931Zm6.296 5.618c-.61.566-1.804.303-2.614-.591-.837-.892-.994-2.086-.375-2.66.63-.566 1.787-.301 2.626.591.838.903 1 2.088.363 2.66Zm4.32 7.188c-.785.545-2.067.034-2.86-1.104-.784-1.138-.784-2.503.017-3.05.795-.547 2.058-.055 2.861 1.075.782 1.157.782 2.522-.019 3.08Zm7.304 8.325c-.701.774-2.196.566-3.29-.49-1.119-1.032-1.43-2.496-.726-3.27.71-.776 2.213-.558 3.315.49 1.11 1.03 1.45 2.505.701 3.27Zm9.442 2.81c-.31 1.003-1.75 1.459-3.199 1.033-1.448-.439-2.395-1.613-2.103-2.626.301-1.01 1.747-1.484 3.207-1.028 1.446.436 2.396 1.602 2.095 2.622Zm10.744 1.193c.036 1.055-1.193 1.93-2.715 1.95-1.53.034-2.769-.82-2.786-1.86 0-1.065 1.202-1.932 2.733-1.958 1.522-.03 2.768.818 2.768 1.868Zm10.555-.405c.182 1.03-.875 2.088-2.387 2.37-1.485.271-2.861-.365-3.05-1.386-.184-1.056.893-2.114 2.376-2.387 1.514-.263 2.868.356 3.061 1.403Z"/>
+      </symbol>
+      <!-- Download -->
+      <!-- https://lucide.dev/icons/download -->
+      <symbol id="icon:download" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+        <polyline points="7 10 12 15 17 10"/>
+        <line x1="12" x2="12" y1="15" y2="3"/>
+      </symbol>
+      <!-- External Link -->
+      <!-- https://lucide.dev/icons/external-link -->
+      <symbol id="icon:external-link" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M15 3h6v6"/>
+        <path d="M10 14 21 3"/>
+        <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+      </symbol>
+      <!-- Cloud Download -->
+      <!-- https://lucide.dev/icons/cloud-download -->
+      <symbol id="icon:cloud-download" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M12 13v8l-4-4"/>
+        <path d="m12 21 4-4"/>
+        <path d="M4.393 15.269A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.436 8.284"/>
+      </symbol>
+      <!-- Cloud Upload -->
+      <!-- https://lucide.dev/icons/cloud-upload -->
+      <symbol id="icon:cloud-upload" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M12 13v8"/>
+        <path d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242"/>
+        <path d="m8 17 4-4 4 4"/>
+      </symbol>
     </svg>
   </body>
 </html>

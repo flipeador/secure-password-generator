@@ -3,7 +3,7 @@
 
 // Tool for inspecting ESLint flat configs.
 // https://github.com/eslint/config-inspector
-// npx @eslint/config-inspector
+// pnpm dlx @eslint/config-inspector
 
 // Global identifiers from different JavaScript environments.
 // https://github.com/sindresorhus/globals
@@ -13,8 +13,26 @@ import globals from 'globals';
 // https://eslint.style/packages/default
 import stylistic from '@stylistic/eslint-plugin';
 
+// Lint CSS files using ESLint.
+// https://github.com/eslint/css
+import css from '@eslint/css';
+
 export default [
     {
+        files: ['extension/**/*.css'],
+        plugins: { css },
+        language: 'css/css',
+        rules: {
+            'css/no-empty-blocks': 'error',
+            'css/no-duplicate-imports': 'error',
+            'css/no-invalid-at-rules': 'error'
+        }
+    },
+    {
+        files: [
+            '*.js',
+            'extension/**/*.js'
+        ],
         languageOptions: {
             globals: {
                 ...globals.browser,
@@ -88,6 +106,12 @@ export default [
             '@stylistic/semi-spacing': 'error',
             '@stylistic/semi-style': ['error', 'last'],
             '@stylistic/switch-colon-spacing': 'error'
+        }
+    },
+    {
+        files: ['*.js'],
+        languageOptions: {
+            globals: globals.node
         }
     }
 ];
