@@ -27,8 +27,8 @@ Browser extension to generate secure random passwords and QR codes.
 </p>
 
 > [!NOTE]
-> SMS verification is one of the weakest methods for two-factor authentication ([2FA][2fa]). [^1] \
-> If possible, use a [📱software-based authenticator][auth][^2] and disable other [2FA][2fa] alternatives.
+> SMS verification is one of the weakest methods for two-factor authentication ([2FA][2fa]). [^1] [^2] \
+> If possible, use a [📱software-based authenticator][auth][^3], and disable other [2FA][2fa] alternatives.
 
 #### I'm kinda paranoid and I don't trust this extension? 🤔
 
@@ -103,8 +103,9 @@ This project is licensed under the **GNU General Public License v3.0**.
 See the [license file](LICENSE) for details.
 
 <!-- Footnotes -->
-[^1]: <https://howtogeek.com/310418/why-you-shouldnt-use-sms-for-two-factor-authentication>
-[^2]: <https://microsoft.com/en/security/mobile-authenticator-app>
+[^1]: [YouTube — Enable This New Cell Phone Security Option Now! (@ThioJoe)](https://youtu.be/mUiQgAIlEIg)
+[^2]: [How-To Geek — Why You Shouldn't Use SMS for Two-Factor Authentication](https://howtogeek.com/310418/why-you-shouldnt-use-sms-for-two-factor-authentication)
+[^3]: [Microsoft Mobile Authenticator App](https://microsoft.com/en/security/mobile-authenticator-app)
 
 <!-- Reference Links -->
 [spg]: https://github.com/mar-kolya/secure-password-generator
