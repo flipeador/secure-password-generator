@@ -18,7 +18,7 @@ class QRCode extends ShadowComponent {
         QR.draw(canvas, this.value, { border: 'white' });
 
         const a = document.createElement('a');
-        a.href = canvas.toDataURL(); // PNG
+        a.href = canvas.toDataURL('image/png');
         a.download = 'qr-code.png';
         a.click();
     }
