@@ -55,8 +55,10 @@ function Ɐ(t){return(new TextEncoder).encode(t)}class π{constructor(e){this.�
  * @returns {number}
  */
 function getDevicePixelCellSize(options) {
-    if (options?.size) return options.size;
-    return CELL_SIZE_PX * window.devicePixelRatio;
+    return Math.floor(
+        options.size ??
+        CELL_SIZE_PX * window.devicePixelRatio
+    );
 }
 
 function addRect(fragment, x, y, color) {
