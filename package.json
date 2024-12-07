@@ -6,13 +6,15 @@
   "version": "1.0.5",
   "type": "module",
   "scripts": {
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "lint:ci": "pnpm dlx @eslint/config-inspector"
   },
   "devDependencies": {
-    "@stylistic/eslint-plugin": "^2.10.1",
-    "chrome-types": "^0.1.316",
-    "eslint": "^9.14.0",
-    "globals": "^15.12.0"
+    "@eslint/css": "^0.1.0",
+    "@stylistic/eslint-plugin": "^2.11.0",
+    "chrome-types": "^0.1.323",
+    "eslint": "^9.16.0",
+    "globals": "^15.13.0"
   },
   "engines": {
     "pnpm": ">=9"
