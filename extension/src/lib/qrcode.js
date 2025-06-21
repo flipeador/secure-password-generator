@@ -28,10 +28,6 @@
  * - https://github.com/davidshimjs/qrcodejs/issues/288
  *
  *
- * The word "QR Code" is registered trademark of DENSO WAVE INCORPORATED.
- * https://www.qrcode.com/en/patent.html
- *
- *
  * Modified by @19z.
  * https://github.com/19z/qrcodejs-fixUTF8
  *

@@ -46,7 +46,8 @@ export function randomizedTransfer(source, target, count, exhaustive) {
             if (array.length === 0) array = source.slice();
             target.push(array.splice(random(0, array.length - 1), 1)[0]);
         }
-    } else for (let i = 0; i < count; ++i)
+    }
+    else for (let i = 0; i < count; ++i)
         target.push(source[random(0, source.length - 1)]);
 
     return target;

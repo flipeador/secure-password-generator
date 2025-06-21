@@ -1,5 +1,14 @@
-﻿/node_modules/
-/pnpm-lock.yaml
+﻿# node & pnpm
+node_modules/
+pnpm-lock.yaml
 
-/*.zip
-/test.js
+# extension
+*.zip
+
+# website
+website/
+.astro/
+dist/
+
+# other
+test.js

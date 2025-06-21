@@ -148,7 +148,7 @@ $use.on('click', async () => {
             // https://stackoverflow.com/a/75701621/14822191
             const setInputValue = ($input, value) => {
                 const prop = Object.getOwnPropertyDescriptor(
-                    window.HTMLInputElement.prototype,
+                    HTMLInputElement.prototype,
                     'value'
                 );
                 prop.set.call($input, value); // call the setter
@@ -176,8 +176,7 @@ function generateQrCode(delay=0) {
     generateQrCode.qrTimer = setTimeout(
         () => util.startViewTransition(() => {
             if (!$secret.value && /.+@.+\..+/.test($label.value))
-                return util.getGravatarUrl($label.value, 256 - 12)
-                .then(url => {
+                return util.getGravatarUrl($label.value, 256 - 12).then(url => {
                     setTimeout(() => $gravatar.src = url);
                     return new Promise((resolve, reject) => {
                         $gravatar.onerror = reject;
@@ -221,15 +220,8 @@ async function updateTOTP(period=30) {
  * @see https://developer.mozilla.org/docs/Mozilla/Add-ons/WebExtensions/API/scripting/executeScript
  */
 async function executeScript(func, ...args) {
-    const tabs = await chrome.tabs.query({
-        active: true,
-        currentWindow: true
-    });
-
-    return chrome.scripting.executeScript({
-        target: { tabId: tabs[0].id },
-        func, args
-    });
+    const tabs = await chrome.tabs.query({ active: true, currentWindow: true });
+    return chrome.scripting.executeScript({ target: { tabId: tabs[0].id }, func, args });
 }
 
 window.document.body.style.removeProperty('display');

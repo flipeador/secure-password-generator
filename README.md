@@ -42,8 +42,8 @@ If you are concerned about automatic updates, [load the extension directly from 
 
 | File | Author | Description |
 | --- | --- | --- |
-| [`otp2fa.js`](extension/lib/otp2fa.js) | @flipeador | One-time password implementation. |
-| [`qrcode.js`](extension/lib/qrcode.js) | @davidshimjs | QR code generator for the browser. |
+| [`otp2fa.js`](extension/src/lib/otp2fa.js) | @flipeador | One-time password implementation. |
+| [`qrcode.js`](extension/src/lib/qrcode.js) | @davidshimjs | QR code generator for the browser. |
 
 ## Secure Random Password Generator
 

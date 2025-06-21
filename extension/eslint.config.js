@@ -1,6 +1,8 @@
 // ESLint Flat Configuration File.
 // https://eslint.org/docs/latest/use/configure/configuration-files
 
+import { defineConfig } from 'eslint/config';
+
 // Tool for inspecting ESLint flat configs.
 // https://github.com/eslint/config-inspector
 // pnpm dlx @eslint/config-inspector
@@ -17,9 +19,9 @@ import stylistic from '@stylistic/eslint-plugin';
 // https://github.com/eslint/css
 import css from '@eslint/css';
 
-export default [
+export default defineConfig(
     {
-        files: ['extension/**/*.css'],
+        files: ['**/*.css'],
         plugins: { css },
         language: 'css/css',
         rules: {
@@ -29,23 +31,21 @@ export default [
         }
     },
     {
-        files: [
-            '*.js',
-            'extension/**/*.js'
-        ],
+        files: ['**/*.js'],
         languageOptions: {
-            globals: {
-                ...globals.browser,
-                ...globals.webextensions
-            }
+            globals: globals.node
         },
         plugins: {
            '@stylistic': stylistic
         },
         rules: {
+            'class-methods-use-this': 'warn',
             'constructor-super': 'error',
+            'default-case-last': 'error',
+            'eqeqeq': ['error', 'smart'],
             'for-direction': 'error',
             'getter-return': 'error',
+            'new-cap': 'error',
             'no-case-declarations': 'error',
             'no-class-assign': 'error',
             'no-compare-neg-zero': 'error',
@@ -62,23 +62,30 @@ export default [
             'no-empty-character-class': 'error',
             'no-empty-pattern': 'error',
             'no-empty-static-block': 'error',
+            'no-extra-bind': 'error',
             'no-extra-boolean-cast': 'error',
             'no-global-assign': 'error',
             'no-invalid-regexp': 'error',
             'no-irregular-whitespace': 'error',
             'no-loss-of-precision': 'error',
             'no-misleading-character-class': 'error',
+            'no-multi-str': 'error',
             'no-new-native-nonconstructor': 'error',
+            'no-new-wrappers': 'error',
             'no-nonoctal-decimal-escape': 'error',
             'no-obj-calls': 'error',
+            'no-object-constructor': 'error',
             'no-octal': 'error',
+            'no-octal-escape': 'error',
             'no-redeclare': 'error',
             'no-regex-spaces': 'error',
             'no-self-assign': 'error',
             'no-setter-return': 'error',
+            'no-sparse-arrays': 'error',
             'no-this-before-super': 'error',
             'no-undef': 'error',
             'no-unexpected-multiline': 'error',
+            'no-unneeded-ternary': 'error',
             'no-unreachable': 'error',
             'no-unsafe-finally': 'error',
             'no-unsafe-negation': 'error',
@@ -86,18 +93,28 @@ export default [
             'no-unused-labels': 'warn',
             'no-unused-private-class-members': 'warn',
             'no-unused-vars': 'warn',
+            'no-useless-assignment': 'error',
             'no-useless-backreference': 'error',
             'no-useless-catch': 'error',
+            'no-useless-computed-key': 'error',
+            'no-useless-concat': 'error',
+            'no-useless-constructor': 'error',
             'no-useless-escape': 'error',
+            'no-useless-return': 'error',
             'no-var': 'error',
             'no-with': 'error',
+            'prefer-const': 'error',
             'require-yield': 'error',
+            'unicode-bom': 'error',
             'use-isnan': 'error',
             'valid-typeof': 'error',
             // ESLint Stylistic
+            '@stylistic/func-call-spacing': 'error',
+            '@stylistic/key-spacing': 'error',
+            '@stylistic/keyword-spacing': 'error',
+            '@stylistic/new-parens': 'error',
             '@stylistic/no-extra-semi': 'error',
             '@stylistic/no-floating-decimal': 'error',
-            '@stylistic/no-multi-spaces': 'error',
             '@stylistic/no-tabs': 'error',
             '@stylistic/no-trailing-spaces': 'error',
             '@stylistic/no-whitespace-before-property': 'error',
@@ -105,13 +122,17 @@ export default [
             '@stylistic/semi': ['error', 'always'],
             '@stylistic/semi-spacing': 'error',
             '@stylistic/semi-style': ['error', 'last'],
-            '@stylistic/switch-colon-spacing': 'error'
+            '@stylistic/switch-colon-spacing': 'error',
+            '@stylistic/template-tag-spacing': 'error'
         }
     },
     {
-        files: ['*.js'],
+        files: ['src/**/*.js'],
         languageOptions: {
-            globals: globals.node
+            globals: {
+                ...globals.browser,
+                ...globals.webextensions
+            }
         }
     }
-];
+);
