@@ -105,7 +105,7 @@ See the [license file](LICENSE) for details.
 <!-- Footnotes -->
 [^1]: [YouTube — Enable This New Cell Phone Security Option Now! (@ThioJoe)](https://youtu.be/mUiQgAIlEIg)
 [^2]: [How-To Geek — Why You Shouldn't Use SMS for Two-Factor Authentication](https://howtogeek.com/310418/why-you-shouldnt-use-sms-for-two-factor-authentication)
-[^3]: [Microsoft Mobile Authenticator App](https://microsoft.com/en/security/mobile-authenticator-app)
+[^3]: [Aegis Authenticator](https://github.com/beemdevelopment/Aegis) (a free, secure and open source 2FA app for Android)
 
 <!-- Reference Links -->
 [spg]: https://github.com/mar-kolya/secure-password-generator
